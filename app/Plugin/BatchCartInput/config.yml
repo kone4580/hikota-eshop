@@ -1,0 +1,6 @@
+name: 商品一括購入プラグイン for EC-CUBE3
+code: BatchCartInput
+version: 0.0.2
+event: Event
+service:
+    - BatchCartInputServiceProvider

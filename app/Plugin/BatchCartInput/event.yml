@@ -1,0 +1,7 @@
+# front page event
+Product/list.twig:
+    - [onRenderProductList, NORMAL]
+      
+#eccube.event.route.product_list.controller:
+eccube.event.route.product_list.response:
+    - [beforeProductList, NORMAL]

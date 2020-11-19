@@ -1,0 +1,7 @@
+name: 'カテゴリ別ランキングブロック for EC-CUBE3'
+code: CategorySalesRankingBlock
+version: 1.0.3
+service:
+    - CategorySalesRankingBlockServiceProvider
+orm.path:
+  - /Resource/doctrine

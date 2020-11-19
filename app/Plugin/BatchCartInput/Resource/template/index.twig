@@ -1,0 +1,113 @@
+{% if pagination.totalItemCount > 0 %}
+<script type="text/javascript">//<![CDATA[
+  function AllInCart() {
+    var searchForm = $("#form1");
+
+    $("input[name='product_id']").each(function() {
+      searchForm.append($('<input type="hidden" />').attr("name", "product_id[]").val($(this).val()));
+    });
+
+    $("input[name='product_class_id']").each(function() {
+      searchForm.append($('<input type="hidden" />').attr("name", "product_class_id[]").val($(this).val()));
+    });
+
+    $("input[name='quantity']").each(function() {
+      searchForm.append($('<input type="hidden" />').attr("name", "quantity[]").val($(this).val()));
+    });
+
+    $("#form1 input[name='mode']").val("allincart")
+
+    searchForm.submit();
+  }
+
+  function calc() {
+
+    var total = 0;
+    $("form[name=product_form]").each(function() {
+      var product_class_id = $(this).find('input[name=product_class_id]').val() ;
+      var price = $(this).find('input[name=price]').val() ;
+      var quantity = $(this).find('input[name=quantity]').val() ;
+      var sub_total = price * quantity;
+
+      total += sub_total;
+      //alert (sub_total);
+      $('span.sub_total_'+product_class_id).html(separate(sub_total));
+    });
+
+    $('span.total').html(separate(total));
+  }
+
+  function separate(num){
+    return String(num).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+  }
+  //]]></script>
+
+<div class="row no-padding mb50">
+    <table class="table table-hover table-condensed">
+        <tr>
+            <th width="10%">商品画像</th>
+            <th>商品名</th>
+            <th>説明</th>
+            <th>規格1</th>
+            <th>規格2</th>
+            <th>単価</th>
+            <th width="10%">数量</th>
+            <th>小計</th>
+        </tr>
+        {% for Product in pagination %}
+        <tr>
+            <td rowspan="{{ Product.ProductClasses|length }}">
+                <a href="{{ url('product_detail', {'id': Product.id}) }}">
+                    <img src="{{ app.config.image_save_urlpath }}/{{ Product.main_list_image|no_image_product }}">
+                </a>
+            </td>
+            <td rowspan="{{ Product.ProductClasses|length }}">
+                {{ Product.name }}
+            </td>
+            <td rowspan="{{ Product.ProductClasses|length }}">
+                {% if Product.description_list %}
+                {{ Product.description_list|raw|nl2br }}
+                {% endif %}
+            </td>
+            {% for ProductClass in Product.ProductClasses %}
+            {% if loop.first == false %}
+        </tr>
+        <tr>
+            {% endif %}
+            <td>
+                {{ ProductClass.getClassCategory1 }}
+            </td>
+            <td>
+                {{ ProductClass.getClassCategory2 }}
+            </td>
+            <td>
+                {{ ProductClass.getPrice02IncTax|price }}
+            </td>
+            <td class="form-group form-inline">
+                <form name="product_form" class="">
+                    <input type="hidden" name="product_id" value="{{ Product.id }}">
+                    <input type="hidden" name="product_class_id" value="{{ ProductClass.id }}">
+                    <input type="hidden" name="price" value="{{ ProductClass.getPrice02IncTax }}">
+                    <input type="number" onchange="calc()" name="quantity" class="form-control" style="width:100%;" value="0" maxlength="7">
+                </form>
+            </td>
+            <td>
+                <span class="sub_total_{{ ProductClass.id }}">0</span>
+            </td>
+        </tr>
+            {% if loop.last == false %}
+        </tr>
+            {% endif %}
+            {% endfor %}
+        {% endfor %}
+        <tr>
+            <td colspan="6"></td>
+            <th>合計</th>
+            <td>
+                <span class="total">0</span>
+            </td>
+        </tr>
+    </table>
+    <button onclick="AllInCart(); return false;" type="submit" class="btn btn-primary btn-block prevention-btn prevention-mask">カートに入れる</button>
+</div>
+{% endif %}

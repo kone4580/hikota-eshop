@@ -1,0 +1,80 @@
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'cart_page' %}
+
+{% block main %}
+
+<div class="main" class="page_section">
+  <div class="wrap">
+    <h1 class="page-heading">ログイン</h1>
+
+    <div class="loginWrap">
+      <div class="user-login">
+        <div class="loginbox">
+          <h2 class="capt">HIKOTA E-SHOPにログイン</h2>
+          <form method="post" action="{{ url('login_check') }}">
+              <input type="hidden" name="_target_path" value="shopping" />
+              <input type="hidden" name="_failure_path" value="shopping_login" />
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+              {% if app.session.flashBag.has('eccube.login.target.path') %}
+                  {% for targetPath in app.session.flashBag.get('eccube.login.target.path') %}
+                      <input type="hidden" name="_target_path" value="{{ targetPath }}" />
+                  {% endfor %}
+              {% endif %}
+              <div id="logIn" class="logIn">
+                <div id="mypage_login_box__login_email" class="form-group">
+                    {{ form_widget(form.login_email, {'attr': {'style' : 'ime-mode: disabled;', 'placeholder' : 'メールアドレス', 'autofocus': true}}) }}
+                </div>
+                <div id="mypage_login_box__login_pass" class="form-group">
+                    {{ form_widget(form.login_pass,  {'attr': {'placeholder' : 'パスワード' }}) }}
+                    {% if BaseInfo.option_remember_me %}
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            <input id="mypage_login_box__login_memory" type="hidden" name="login_memory" value="1">
+                        {% else %}
+                            {{ form_widget(form.login_memory) }}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="extra-form form-group">
+                    {% for f in form.getIterator %}
+                        {% if f.vars.name matches '[^plg*]' %}
+                            {{ form_label(f) }}
+                            {{ form_widget(f) }}
+                            {{ form_errors(f) }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% if error %}
+                <div id="mypage_login_box__error_message" class="form-group">
+                    <span class="text-danger">{{ error|trans|raw }}</span>
+                </div>
+                {% endif %}
+                <div id="mypage_login__login_button" class="btn_area">
+                    <p><button type="submit" class="gBtn">ログイン</button></p>
+                    <ul id="mypage_login__login_menu" >
+                        <li><a href="{{ url('forgot') }}">ログイン情報をお忘れですか？</a></li>
+                        <li><a href="{{ url('entry') }}">新規会員登録</a></li>
+                    </ul>
+                </div>
+              </div>
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+          </form>
+        </div>
+      </div>
+
+
+      <div class="member-info-section">
+        <h4><img src="{{ app.config.front_urlpath }}/assets/images/common/icon_beginner.png" alt="初心者マーク" class="icon_beginner">初めてのかたはこちら</h4>
+        <div class="form-content">
+          <p class="brand-description">HIKOTA E-SHOPのご利用には会員登録が必要です。 ご登録・年会費はすべて無料！ ご登録いただくと、ポイントをはじめとした、会員限定のさまざまな特典・サービスをご利用いただだけます。</p>
+          <p class="brand-information">※本サイトはプロフェッショナル専用の卸サイトです。<br>会員登録には、美容サロン、クリニックの方または開業（勤務）予定の方のみとさせていただきます。</p>
+        </div>
+        <a href="{{ url('entry') }}" class="btn btn-blue btn-block">新規会員登録（無料）</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

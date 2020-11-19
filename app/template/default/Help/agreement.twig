@@ -1,0 +1,17 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+
+
+<div id="main" class="page_section">
+  <div class="wrap">
+    <h1 class="page-heading">利用規約</h1>
+    <div id="agreement_box__body" class="container-fluid">
+      {% if help is not null %}
+      {{ help.customerAgreement|raw|nl2br }}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

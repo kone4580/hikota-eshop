@@ -1,0 +1,22 @@
+<div class="search_form">
+  <form method="get" id="searchform" action="{{ path('product_list') }}">
+    {{ form_widget(form.category_id) }}
+    <div class="search_form_input">
+      {{ form_widget(form.name, {'attr': { 'placeholder' : "キーワードや商品名で検索" , 'class' : "site-search-input ui-autocomplete-input" }} ) }}
+      <span class="input-group-btn">
+        <button class="btn btn-search" type="submit">
+          <span class="fa fa-search"></span>
+        </button>
+      </span>
+      <div class="extra-form">
+        {% for f in form.getIterator %}
+          {% if f.vars.name matches '[^plg*]' %}
+            {{ form_label(f) }}
+            {{ form_widget(f) }}
+            {{ form_errors(f) }}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </form>
+</div>

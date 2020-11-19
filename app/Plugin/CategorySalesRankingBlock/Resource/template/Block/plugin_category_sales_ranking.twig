@@ -1,0 +1,43 @@
+{% if category_sales_ranking %}
+    <div id="category_sales_ranking">
+        {% if Category %}
+            <h2>{{ Category.name }}ランキング</h2>
+        {% endif %}
+        <ul>
+            {% for key, arrProduct in category_sales_ranking %}
+                {% set Product = arrProduct[0] %}
+                <li id="result_list_box--{{ Product.id }}" class="row">
+                    <div class="col-sm-3 col-xs-3">
+                        <span class="badge">{{ key+1 }}位</span>
+                    </div>
+                    <div id="result_list__item--{{ Product.id }}" class="product_item col-sm-9 col-xs-9">
+                        <a href="{{ url('product_detail', {'id': Product.id}) }}">
+                            <div id="result_list__image--{{ Product.id }}" class="item_photo">
+                                <img src="{{ app.config.image_save_urlpath }}/{{ Product.main_list_image|no_image_product }}">
+                            </div>
+                            <dl id="result_list__detail--{{ Product.id }}">
+                                <dt id="result_list__name--{{ Product.id }}" class="item_name">{{ Product.name }}</dt>
+                                {% if Product.description_list %}
+                                    <dd id="result_list__description_list--{{ Product.id }}" class="item_comment">{{ Product.description_list|raw|nl2br }}</dd>
+                                {% endif %}
+                                {% if Product.hasProductClass %}
+                                    {% if Product.getPrice02Min == Product.getPrice02Max %}
+                                        <dd id="result_list__price02_inc_tax--{{ Product.id }}" class="item_price">
+                                            {{ Product.getPrice02IncTaxMin|price }}
+                                        </dd>
+                                    {% else %}
+                                        <dd id="result_list__price02_inc_tax--{{ Product.id }}" class="item_price">
+                                            {{ Product.getPrice02IncTaxMin|price }} ～ {{ Product.getPrice02IncTaxMax|price }}
+                                        </dd>
+                                    {% endif %}
+                                {% else %}
+                                    <dd id="result_list__price02_inc_tax--{{ Product.id }}" class="item_price">{{ Product.getPrice02IncTaxMin|price }}</dd>
+                                {% endif %}
+                            </dl>
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
