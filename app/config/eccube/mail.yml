@@ -1,9 +1,9 @@
 mail:
-    transport: mail
-    host: 
-    port: 
-    username: 
-    password: 
+    transport: smtp
+    host: smtp.mailtrap.io
+    port: 2525
+    username: 235581ffbd1d17
+    password: a919877b31e817
     encryption: null
     auth_mode: null
     charset_iso_2022_jp: false
