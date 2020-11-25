@@ -140,133 +140,321 @@ $(function(){
               <!-- ▲関連カテゴリ▲ -->
 
 
-              <!--▼商品コード-->
-              <div class="product_info-table">
-    						<dl>
-    							<dt>商品コード</dt>
-    							<dd>{{ Product.code_min }}
-                  {% if Product.code_min != Product.code_max %} ～ {{ Product.code_max }}{% endif %}</dd>
-    						</dl>
-                <!--# maker-plugin-tag #-->
-    					</div>
-              <!--▲商品コード-->
+				<!--▼商品コード-->
+				<div class="product_info-table">
+					<dl>
+						<dt>商品コード</dt>
+						<dd>{{ Product.code_min }}
+							{% if Product.code_min != Product.code_max %}
+								～
+								{{ Product.code_max }}
+							{% endif %}
+						</dd>
+					</dl>
+					<!--#maker-plugin-tag#-->
+				</div>
+				<!--▲商品コード-->
+
+				{# breakの初期化 #}
+				{% set break = false %}
+				{% for ProductCategory in Product.ProductCategories if not break %}
+					{% for Category in ProductCategory.Category.path if not break %}
+						{% if Category.id == 7 %}
+							{# 商品のカテゴリーにカラーが含められている場合（category_id が 7） #}
+
+							<div class="product_info-pricezone">
+								<!--★通常価格★-->
+								{% if Product.hasProductClass -%}
+									{% if Product.getPrice01Min is not null and Product.getPrice01Min == Product.getPrice01Max %}
+										{# 価格幅がない場合 #}
+										<p id="detail_description_box__class_normal_price" class="normal_price">
+											通常価格：<span class="price01_default">{{ Product.getPrice01Min|price }}</span>
+											<span class="small">（税抜）</span>
+										</p>
+									{% elseif Product.getPrice01Min is not null and Product.getPrice01Max is not null %}
+										{# 価格幅がある場合 #}
+										<p id="detail_description_box__class_normal_range_price" class="normal_price">
+											通常価格：<span class="price01_default">{{ Product.getPrice01Min|price }}
+												～
+												{{ Product.getPrice01Max|price }}</span>
+											<span class="small">（税抜）</span>
+										</p>
+									{% endif %}
+								{% else -%}
+									{# 規格設定がない場合 #}
+									{% if Product.getPrice01Max is not null %}
+										<p id="detail_description_box__normal_price" class="normal_price">
+											通常価格：<span class="price01_default">{{ Product.getPrice01Min|price }}</span>
+											<span class="small">（税抜）</span>
+										</p>
+									{% endif %}
+								{% endif -%}
+							</div>
+
+
+							<h2>{{ Category.name }}の場合は一覧表示</h2>
+
+							{% if app.isGranted('ROLE_USER') %}
+
+								<script type="text/javascript">//<![CDATA[
+									function AllInCart() {
+
+										var searchForm = $("#form1");
+
+										$("input[name='product_id']").each(function () {
+											searchForm.append($('<input type="hidden" />').attr("name", "product_id[]").val($(this).val()));
+										});
+
+										$("input[name='product_class_id']").each(function () {
+											searchForm.append($('<input type="hidden" />').attr("name", "product_class_id[]").val($(this).val()));
+										});
+
+										$("input[name='quantity']").each(function () {
+											searchForm.append($('<input type="hidden" />').attr("name", "quantity[]").val($(this).val()));
+										});
+
+										$("#form1 input[name='mode']").val("allincart")
+
+										searchForm.submit();
+									}
+
+									function calc() {
+
+										var total = 0;
+
+										$("form[name=product_form]").each(function () {
+
+											var product_class_id = $(this).find('input[name=product_class_id]').val();
+											var price = $(this).find('input[name=price]').val();
+											var quantity = $(this).find('input[name=quantity]').val();
+											var sub_total = price * quantity;
+
+											total += sub_total;
+											//alert (sub_total);
+											$('span.sub_total_' + product_class_id).html(separate(sub_total));
+										});
+
+										$('span.total').html(separate(total));
+									}
+
+									function separate(num) {
+										return '¥ ' + String(num).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+									}
+									//]]>
+								</script>
+
+							{% endif %}
+
+							<div class="row no-padding mb50">
+								<table class="table table-hover table-condensed" style="width:100%;">
+									<tr>
+										<th>カラー</th>
+										<th>明度</th>
+										<th>サロン様価格</th>
+										<th width="18%">数量</th>
+										{% if app.isGranted('ROLE_USER') %}
+											<th width="18%">小計</th>
+										{% endif %}
+									</tr>
+									{% for ProductClass in Product.ProductClasses %}
+										<tr>
+											<td>
+												{{ ProductClass.getColor }}{{ ProductClass.getClassCategory1 }}
+											</td>
+											<td>
+												{{ ProductClass.Color }}{{ ProductClass.getClassCategory2 }}
+											</td>
+											<td>
+												{% if app.isGranted('ROLE_USER') %}
+													<span>{{ Product.getPrice02Min|price }}</span>（税抜）
+												{% else -%}
+													<span class="font-blue">ログイン後に表示されます</span>
+												{% endif %}
+											</td>
+											<td class="form-group form-inline">
+												<form name="product_form" class="">
+													<input type="hidden" name="product_id" value="{{ Product.id }}">
+													<input type="hidden" name="product_class_id" value="{{ ProductClass.id }}">
+													<input type="hidden" name="price" value="{{ Product.getPrice02Min }}">
+													<input type="number" onchange="calc()" name="quantity" class="form-control" style="width:100%;" value="0" maxlength="7">
+												</form>
+											</td>
+											{% if app.isGranted('ROLE_USER') %}
+												<td>
+													<span class="sub_total_{{ ProductClass.id }}">¥ 0</span>
+												</td>
+											{% endif %}
+										</tr>
+									{% endfor %}
+									{% if app.isGranted('ROLE_USER') %}
+										<tr>
+											<td colspan="3"></td>
+											<th>合計</th>
+											<td>
+												<span class="total">¥ 0</span>
+											</td>
+										</tr>
+									{% endif %}
+								</table>
+								{% if app.isGranted('ROLE_USER') %}
+									<button onclick="AllInCart(); return false;" type="submit" class="btn btn-primary btn-block prevention-btn prevention-mask">カートに入れる</button>
+								{% endif %}
+							</div>
+
+							{# for文を抜けるbreak #}
+							{% set break = true %}
+						{% else %}
+							{# 商品のカテゴリーにカラー（category_id = 7）が含められていない場合 #}
+							<div class="product_info-pricezone">
+								<!--★通常価格★-->
+								{% if Product.hasProductClass -%}
+									{% if Product.getPrice01Min is not null and Product.getPrice01Min == Product.getPrice01Max %}
+										{# 価格幅がない場合 #}
+										<p id="detail_description_box__class_normal_price" class="normal_price">
+											通常価格：<span class="price01_default">{{ Product.getPrice01Min|price }}</span>
+											<span class="small">（税抜）</span>
+										</p>
+									{% elseif Product.getPrice01Min is not null and Product.getPrice01Max is not null %}
+										{# 価格幅がある場合 #}
+										<p id="detail_description_box__class_normal_range_price" class="normal_price">
+											通常価格：<span class="price01_default">{{ Product.getPrice01Min|price }}
+												～
+												{{ Product.getPrice01Max|price }}</span>
+											<span class="small">（税抜）</span>
+										</p>
+									{% endif %}
+								{% else -%}
+									{# 規格設定がない場合 #}
+									{% if Product.getPrice01Max is not null %}
+										<p id="detail_description_box__normal_price" class="normal_price">
+											通常価格：<span class="price01_default">{{ Product.getPrice01Min|price }}</span>
+											<span class="small">（税抜）</span>
+										</p>
+									{% endif %}
+								{% endif -%}
+
+								<!--★販売価格★-->
+								{% if Product.hasProductClass -%}
+									{% if Product.getPrice02IncTaxMin == Product.getPrice02IncTaxMax %}
+										{# 価格幅がない場合 #}
+										<p class="product_info-price">サロン様価格:
+											{% if app.isGranted('ROLE_USER') %}
+												<span>{{ Product.getPrice02Min|price }}</span>（税抜）
+											{% else -%}
+												<span class="font-blue">ログイン後に表示されます</span>
+											{% endif %}
+										</p>
+									{% else %}
+										{# 価格幅がある場合 #}
+										<p class="product_info-price">サロン様価格:
+											{% if app.isGranted('ROLE_USER') %}
+												<span class="">{{ Product.getPrice02Min|price }}
+													～
+													{{  Product.getPrice02Max|price }}</span>（税抜）
+											{% else -%}
+												<span class="font-blue">ログイン後に表示されます</span>
+											{% endif %}
+										</p>
+									{% endif %}
+								{% else -%}
+									{# 規格設定がない場合 #}
+									<p class="product_info-price">サロン様価格:
+										<span>{{ Product.getPrice02Min|price }}</span>（税抜）</p>
+								{% endif -%}
+							</div>
+
+							<h2>カラー以外の場合</h2>
+
+							<form action="?" method="post" id="form1" name="form1">
+								<!--▼買い物かご-->
+								<div id="detail_cart_box" class="cart_area">
+									{% if Product.stock_find %}
+										{# 規格 #}
+										{% if form.classcategory_id1 is defined %}
+											<ul id="detail_cart_box__cart_class_category_id" class="classcategory_list">
+												{# 規格1 #}
+												<li>
+													{{ form_widget(form.classcategory_id1) }}
+													{{ form_errors(form.classcategory_id1) }}
+												</li>
+												{# 規格2 #}
+												{% if form.classcategory_id2 is defined %}
+													<li>
+														{{ form_widget(form.classcategory_id2) }}
+														{{ form_errors(form.classcategory_id2) }}
+													</li>
+												{% endif %}
+											</ul>
+										{% endif %}
+
+										{# 数量 #}
+										<dl id="detail_cart_box__cart_quantity" class="quantity">
+											<dt>数量</dt>
+											<dd>
+												{{ form_widget(form.quantity) }}
+												{{ form_errors(form.quantity) }}
+											</dd>
+										</dl>
+
+										<div class="extra-form">
+											{% for f in form.getIterator %}
+												{% if f.vars.name matches '[^plg*]' %}
+													{{ form_row(f) }}
+												{% endif %}
+											{% endfor %}
+										</div>
+
+										{% if app.isGranted('ROLE_USER') %}
+											{# カートボタン #}
+											<div id="detail_cart_box__button_area" class="btn_area">
+												<button type="submit" id="add-cart" class="btn-add_cart">カートに入れる</button>
+
+												{#Favorite product button#}
+												{% if BaseInfo.option_favorite_product == 1 %}
+													{% if is_favorite == false %}
+														<button type="submit" id="favorite" class="btn-favo">
+															<i class="far fa-heart"></i>お気に入りに追加</button>
+													{% else %}
+														<button type="submit" id="favorite" class="btn-favo" disabled="disabled">お気に入りに追加済みです</button>
+													{% endif %}
+												{% endif %}
+											</div>
+											{#End div#detail_cart_box__button_area #}
+										{% endif %}
+									{% else %}
+										{# 在庫がない場合は品切れボタンを表示 #}
+										<div id="detail_cart_box__button_area" class="btn_area">
+											<ul class="row">
+												<li class="col-xs-12 col-sm-8">
+													<button type="button" class="btn btn-default btn-block" disabled="disabled">ただいま品切れ中です</button>
+												</li>
+											</ul>
+											{#Favorite product button#}
+											{% if BaseInfo.option_favorite_product == 1 %}
+												{% if is_favorite == false %}
+													<button type="submit" id="favorite" class="btn-favo">
+														<i class="far fa-heart"></i>お気に入りに追加</button>
+												{% else %}
+													<button type="submit" id="favorite" class="btn-favo" disabled="disabled">お気に入りに追加済みです</button>
+												{% endif %}
+											{% endif %}
+										</div>
+										{#End div#detail_cart_box__button_area #}
+									{% endif %}
+									{#End stock find#}
+								</div>
+								<!--▲買い物かご-->
+								{{ form_rest(form) }}
+							</form>
+
+							{# for文を抜けるbreak #}
+							{% set break = true %}
+						{% endif %}
+					{% endfor %}
+				{% endfor %}
 
 
 
-              <div class="product_info-pricezone">
-                <!--★通常価格★-->
-                {% if Product.hasProductClass -%}
-                  {% if Product.getPrice01Min is not null and Product.getPrice01Min == Product.getPrice01Max %}
-                    <p id="detail_description_box__class_normal_price" class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01Min|price }}</span> <span class="small">（税抜）</span></p>
-                  {% elseif Product.getPrice01Min is not null and Product.getPrice01Max is not null %}
-                    <p id="detail_description_box__class_normal_range_price" class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01Min|price }} ～ {{ Product.getPrice01Max|price }}</span> <span class="small">（税抜）</span></p>
-                  {% endif %}
-                {% else -%}
-                  {% if Product.getPrice01Max is not null %}
-                    <p id="detail_description_box__normal_price" class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01Min|price }}</span> <span class="small">（税抜）</span></p>
-                  {% endif %}
-                {% endif -%}
-
-                <!--★販売価格★-->
-                {% if Product.hasProductClass -%}
-                  {% if Product.getPrice02IncTaxMin == Product.getPrice02IncTaxMax %}
-                    <p class="product_info-price">サロン様価格:
-                      {% if app.isGranted('ROLE_USER') %}
-                        <span>{{ Product.getPrice02Min|price }}</span>（税抜）
-                      {% else -%}
-                        <span class="font-blue">ログイン後に表示されます</span>
-                      {% endif %}
-                    </p>
-                    {% else %}
-                    <p class="product_info-price">サロン様価格:
-                      {% if app.isGranted('ROLE_USER') %}
-                        <span class="">{{ Product.getPrice02Min|price }} ～ {{  Product.getPrice02Max|price }}</span>（税抜）
-                      {% else -%}
-                        <span class="font-blue">ログイン後に表示されます</span>
-                      {% endif %}
-                    </p>
-                  {% endif %}
-                {% else -%}
-                  <p class="product_info-price">サロン様価格: <span>{{ Product.getPrice02Min|price }}</span>（税抜）</p>
-                {% endif -%}
-              </div>
-
-
-
-              <form action="?" method="post" id="form1" name="form1">
-                <!--▼買い物かご-->
-                <div id="detail_cart_box" class="cart_area">
-                  {% if Product.stock_find %}
-                    {# 規格 #}
-                    {% if form.classcategory_id1 is defined %}
-                      <ul id="detail_cart_box__cart_class_category_id" class="classcategory_list">
-                        {# 規格1 #}
-                        <li>
-                          {{ form_widget(form.classcategory_id1) }}
-                          {{ form_errors(form.classcategory_id1) }}
-                        </li>
-                        {# 規格2 #}
-                        {% if form.classcategory_id2 is defined %}
-                          <li>
-                            {{ form_widget(form.classcategory_id2) }}
-                            {{ form_errors(form.classcategory_id2) }}
-                          </li>
-                        {% endif %}
-                      </ul>
-                    {% endif %}
-
-                    {# 数量 #}
-                    <dl id="detail_cart_box__cart_quantity" class="quantity">
-                      <dt>数量</dt>
-                      <dd>
-                        {{ form_widget(form.quantity) }}
-                        {{ form_errors(form.quantity) }}
-                      </dd>
-                    </dl>
-
-                    <div class="extra-form">
-                      {% for f in form.getIterator %}
-                        {% if f.vars.name matches '[^plg*]' %}
-                          {{ form_row(f) }}
-                        {% endif %}
-                      {% endfor %}
-                    </div>
-
-                    {% if app.isGranted('ROLE_USER') %}
-                      {# カートボタン #}
-                      <div id="detail_cart_box__button_area" class="btn_area">
-                        <button type="submit" id="add-cart" class="btn-add_cart">カートに入れる</button>
-
-                        {#Favorite product button#}
-                        {% if BaseInfo.option_favorite_product == 1 %}
-                          {% if is_favorite == false %}
-                            <button type="submit" id="favorite" class="btn-favo"><i class="far fa-heart"></i>お気に入りに追加</button>
-                          {% else %}
-                            <button type="submit" id="favorite" class="btn-favo" disabled="disabled">お気に入りに追加済みです</button>
-                          {% endif %}
-                        {% endif %}
-                      </div> {#End div#detail_cart_box__button_area #}
-                    {% endif %}
-                  {% else %}
-                    {# 在庫がない場合は品切れボタンを表示 #}
-                    <div id="detail_cart_box__button_area" class="btn_area">
-                      <ul class="row">
-                        <li class="col-xs-12 col-sm-8"><button type="button" class="btn btn-default btn-block" disabled="disabled">ただいま品切れ中です</button></li>
-                      </ul>
-                      {#Favorite product button#}
-                      {% if BaseInfo.option_favorite_product == 1 %}
-                        {% if is_favorite == false %}
-                          <button type="submit" id="favorite" class="btn-favo"><i class="far fa-heart"></i>お気に入りに追加</button>
-                        {% else %}
-                          <button type="submit" id="favorite" class="btn-favo" disabled="disabled">お気に入りに追加済みです</button>
-                        {% endif %}
-                      {% endif %}
-                    </div> {#End div#detail_cart_box__button_area #}
-                  {% endif %} {#End stock find#}
-                </div>
-                <!--▲買い物かご-->
-                {{ form_rest(form) }}
-              </form>
 
         </div>
       </div>

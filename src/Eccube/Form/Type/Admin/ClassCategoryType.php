@@ -54,6 +54,13 @@ class ClassCategoryType extends AbstractType
                 ),
             ))
         ;
+		$builder
+			->add('color', 'text', array(
+				'label' => '16進数カラーコード',
+				'required' => false,
+				)
+			)
+		;
     }
 
     /**

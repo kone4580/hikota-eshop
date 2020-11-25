@@ -91,6 +91,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                         <div class="form-group">
                             <div class="col-md-12 form-inline">
                                 {{ form_widget(form._token) }}
+								{{ form_widget(form.color, {attr: {placeholder: '例：ff3300'}}) }}
                                 {{ form_widget(form.name, {attr: {placeholder: '分類名を入力'}}) }}
                                 <button class="btn btn-default btn-sm" type="submit">分類作成</button>
                             </div>
