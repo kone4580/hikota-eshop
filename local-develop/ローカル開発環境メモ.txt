@@ -1,0 +1,14 @@
+# ターミナル操作
+
+## 1.eccubeカレントディレクトリに移動
+cd /Applications/MAMP/htdocs//hikota-eshop/
+
+## 2.migration実施
+php app/console migrations:migrate
+
+## 3.phpMyAdmin等でテーブル定義の変更を確認
+
+
+# ローカルの新規会員登録済みユーザー
+ID：eccube@test.com
+PW：testtest
