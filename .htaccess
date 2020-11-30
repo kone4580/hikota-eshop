@@ -26,6 +26,8 @@ DirectoryIndex index.php index.html .ht
     RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
 
+php_value max_input_vars 10000
+
 # 管理画面へのBasic認証サンプル
 #
 # Satisfy Any
