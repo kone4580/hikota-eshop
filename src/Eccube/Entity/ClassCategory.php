@@ -251,12 +251,12 @@ class ClassCategory extends \Eccube\Entity\AbstractEntity
             return null;
         }
         return $this->Creator;
-    }
+	}
+
     /**
      * @var string
      */
     private $color;
-
 
     /**
      * Set color

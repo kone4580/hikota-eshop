@@ -72,6 +72,7 @@ $(function(){
 
 {% endblock %}
 
+
 {% block main %}
     {# todo ブロック化}
     <div id="topicpath" class="row">
@@ -87,7 +88,42 @@ $(function(){
     </div>
     #}
 
-    <main id="main_wrap" role="main">
+<style type="text/css">
+.flex-wrap {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+.color-box {
+	width:30px;
+	height:30px;
+	border: 2px solid #ffffff;
+	margin-right: 5px;
+}
+.counter {
+	text-align: center;
+	width:50px;
+}
+.td-center {
+	text-align: center;
+}
+.td-right {
+	text-align: right;
+	white-space:nowrap;
+}
+.pink-heart {
+	color: #e778af;
+}
+.color-table > thead > tr > th,
+.color-table > tbody > tr > th,
+.color-table > thead > tr > td,
+.color-table > tbody > tr > td{
+    vertical-align: middle;
+}
+</style>
+
+
+	<main id="main_wrap" role="main">
 
   		<div class="product_wrap">
   			<div class="wrap">
@@ -200,6 +236,7 @@ $(function(){
 									function AllInCart() {
 
 										var searchForm = $("#form1");
+										console.log("AllInCart");
 
 										$("input[name='product_id']").each(function () {
 											searchForm.append($('<input type="hidden" />').attr("name", "product_id[]").val($(this).val()));
@@ -216,6 +253,20 @@ $(function(){
 										$("#form1 input[name='mode']").val("allincart")
 
 										searchForm.submit();
+									}
+
+									function plus(obj) {
+										// console.log("plus");
+										obj.form.quantity.value++;
+										calc();
+									}
+
+									function minus(obj) {
+										// console.log("minus");
+										if (obj.form.quantity.value > 0) {
+											obj.form.quantity.value--;
+											calc();
+										}
 									}
 
 									function calc() {
@@ -246,42 +297,56 @@ $(function(){
 							{% endif %}
 
 							<div class="row no-padding mb50">
-								<table class="table table-hover table-condensed" style="width:100%;">
+								<table class="table table-hover table-condensed color-table" style="width:100%;">
 									<tr>
 										<th>カラー</th>
-										<th>明度</th>
-										<th>サロン様価格</th>
-										<th width="18%">数量</th>
+										<th width="10%" class="td-center">明度</th>
+										<th width="14%">サロン様価格</th>
+										<th width="14%">数量</th>
 										{% if app.isGranted('ROLE_USER') %}
-											<th width="18%">小計</th>
+											<th width="14%" class="td-right">小計</th>
+											<th>お気に入り</th>
 										{% endif %}
 									</tr>
 									{% for ProductClass in Product.ProductClasses %}
 										<tr>
 											<td>
-												{{ ProductClass.getColor }}{{ ProductClass.getClassCategory1 }}
+												<div class="flex-wrap">
+													<div class="color-box" style="background-color: #{{ ProductClass.ClassCategory1.color }}"></div>
+													{{ ProductClass.getClassCategory1 }}
+												</div>
 											</td>
-											<td>
-												{{ ProductClass.Color }}{{ ProductClass.getClassCategory2 }}
+											<td class="td-center">
+												{{ ProductClass.getClassCategory2 }}
 											</td>
 											<td>
 												{% if app.isGranted('ROLE_USER') %}
-													<span>{{ Product.getPrice02Min|price }}</span>（税抜）
+													<span>{{ ProductClass.getPrice02|price }}</span>（税抜）
 												{% else -%}
 													<span class="font-blue">ログイン後に表示されます</span>
 												{% endif %}
 											</td>
 											<td class="form-group form-inline">
-												<form name="product_form" class="">
+												<form name="product_form" class="flex-wrap">
 													<input type="hidden" name="product_id" value="{{ Product.id }}">
 													<input type="hidden" name="product_class_id" value="{{ ProductClass.id }}">
-													<input type="hidden" name="price" value="{{ Product.getPrice02Min }}">
-													<input type="number" onchange="calc()" name="quantity" class="form-control" style="width:100%;" value="0" maxlength="7">
+													<input type="hidden" name="price" value="{{ ProductClass.getPrice02 }}">
+													<input type=button value="－" onClick="minus(this)">
+													<input type="text" name="quantity" value="0" size="6" class="counter" onchange="calc()" min="0">
+													<input type=button value="＋" onClick="plus(this)"> 
+
 												</form>
 											</td>
 											{% if app.isGranted('ROLE_USER') %}
-												<td>
+												<td class="td-right">
 													<span class="sub_total_{{ ProductClass.id }}">¥ 0</span>
+												</td>
+												<td class="td-center pink-heart">
+													{% if ProductClass.id % 2 == 0 %}
+														<i class="far fa-heart"></i>
+													{% else %}
+														<i class="fas fa-heart"></i>
+													{% endif %}
 												</td>
 											{% endif %}
 										</tr>
@@ -290,9 +355,10 @@ $(function(){
 										<tr>
 											<td colspan="3"></td>
 											<th>合計</th>
-											<td>
+											<td class="td-right">
 												<span class="total">¥ 0</span>
 											</td>
+											<td></td>
 										</tr>
 									{% endif %}
 								</table>
