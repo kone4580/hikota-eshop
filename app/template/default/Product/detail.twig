@@ -89,6 +89,17 @@ $(function(){
     #}
 
 <style type="text/css">
+
+.acd-label {
+	background-color: #eeeeee;
+	padding: 5px 0 5px 5px;
+	margin: 5px 0
+}
+.flex-spinner {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 .flex-wrap {
 	display: flex;
 	justify-content: flex-start;
@@ -104,24 +115,52 @@ $(function(){
 	text-align: center;
 	width:50px;
 }
-.first-tr {
-	background-color: #eeeeee;
+
+.th-level{
+	width: 10%;
 }
-.td-center {
+.th-price{
+	width: 23.5%;
+}
+.th-count{
+	width: 20%;
+}
+.th-sub_total{
+	width: 22.5%;
+}
+.th-favorite{
+	width: 24%;
+}
+.td-level{
 	text-align: center;
 }
-.td-right {
+.td-price{
 	text-align: right;
 	white-space:nowrap;
 }
-.pink-heart {
+.td-count{
+	text-align: center;
+}
+.td-sub_total{
+	text-align: right;
+	white-space:nowrap;
+}
+.td-favorite{
+	text-align: center;
 	color: #e778af;
+}
+.color-table {
+	margin-left: 35px;
 }
 .color-table > thead > tr > th,
 .color-table > tbody > tr > th,
 .color-table > thead > tr > td,
 .color-table > tbody > tr > td{
     vertical-align: middle;
+}
+.grand-total {
+	text-align: right;
+	margin: 20px 100px 20px 0;
 }
 </style>
 
@@ -219,7 +258,7 @@ $(function(){
 											<span class="small">（税抜）</span>
 										</p>
 									{% endif %}
-								{% else -%}
+								{% else %}
 									{# 規格設定がない場合 #}
 									{% if Product.getPrice01Max is not null %}
 										<p id="detail_description_box__normal_price" class="normal_price">
@@ -299,85 +338,84 @@ $(function(){
 
 							{% endif %}
 
-							<div class="row no-padding mb50">
-								<table class="table table-hover table-condensed color-table" style="width:100%;">
-									<tr>
-										<th width="40%" >カラー</th>
-										<th width="8%" class="td-center">明度</th>
-										<th width="10%">サロン様価格</th>
-										<th>数量</th>
-										{% if app.isGranted('ROLE_USER') %}
-											<th width="13%" class="td-right">小計</th>
-											<th>お気に入り</th>
-										{% endif %}
-									</tr>
-									{% set oldName = "" %}
-									{% for ProductClass in Product.ProductClasses %}
-										{% set newName = ProductClass.getClassCategory1 %}
-										{% if newName != oldName %}
-											<tr class="first-tr">
-										{% else -%}
-											<tr>
+							<div class="mb50">
+								{% set oldName = "" %}
+								{% for ProductClass in Product.ProductClasses %}
+									{% set newName = ProductClass.getClassCategory1 %}
+
+									{% if newName != oldName %}
+										{# 規格1の名称が変わった場合 #}
+										{% if oldName != "" %}
+											{# 一番最初はテーブルの閉じタグを出力しない #}
+											</table>
 										{% endif %}
 
-											<td>
-												<div class="flex-wrap">
-													{% if ProductClass.ClassCategory1.color is null %}
-														<div class="color-box" style="background-color: #ffffff"></div>
-													{% else -%}
-														<div class="color-box" style="background-color: #{{ ProductClass.ClassCategory1.color }}"></div>
-													{% endif %}
-													{{ ProductClass.getClassCategory1 }}
-												</div>
-											</td>
-											<td class="td-center">
-												{{ ProductClass.getClassCategory2 }}
-											</td>
-											<td class="td-right">
+										<h3 class="acd-label">
+											<div class="flex-wrap">
+												{% if ProductClass.ClassCategory1.color is null %}
+													<div class="color-box" style="background-color: #ffffff;"></div>
+												{% else %}
+													<div class="color-box" style="background-color: #{{ ProductClass.ClassCategory1.color }};"></div>
+												{% endif %}
+												{{ ProductClass.getClassCategory1 }}
+											</div>
+										</h3>
+
+										<table class="table table-hover table-condensed color-table">
+											<tr>
+												{# <th width="40%" >カラー</th> #}
+												<th class="th-level">明度</th>
+												<th class="th-price">サロン様価格</th>
+												<th class="th-count">数量</th>
 												{% if app.isGranted('ROLE_USER') %}
-													<span>{{ ProductClass.getPrice02|price }}</span>
-												{% else -%}
-													<span class="font-blue">ログイン後に表示されます</span>
+													<th class="th-sub_total">小計</th>
+													<th class="th-favorite">お気に入り</th>
+												{% endif %}
+											</tr>
+									{% endif %}
+									<tr>
+										<td class="td-level">
+											{{ ProductClass.getClassCategory2 }}
+										</td>
+										<td class="td-price">
+											{% if app.isGranted('ROLE_USER') %}
+												<span>{{ ProductClass.getPrice02|price }}</span>
+											{% else %}
+												<span class="font-blue">ログイン後に表示されます</span>
+											{% endif %}
+										</td>
+										<td class="td-count form-group form-inline">
+											<form name="product_form" class="flex-spinner">
+												<input type="hidden" name="product_id" value="{{ Product.id }}">
+												<input type="hidden" name="product_class_id" value="{{ ProductClass.id }}">
+												<input type="hidden" name="price" value="{{ ProductClass.getPrice02 }}">
+												<input type="button" value="－" onclick="minus(this)">
+												<input type="text" name="quantity" value="0" size="6" class="counter" onchange="calc()" min="0">
+												<input type="button" value="＋" onclick="plus(this)"> 
+											</form>
+										</td>
+										{% if app.isGranted('ROLE_USER') %}
+											<td class="td-sub_total">
+												<span class="sub_total_{{ ProductClass.id }}">¥ 0</span>
+											</td>
+											<td class="td-favorite">
+												{# お気に入り仮実装 #}
+												{% if ProductClass.id % 2 == 0 %}
+													<i class="far fa-heart"></i>
+												{% else %}
+													<i class="fas fa-heart"></i>
 												{% endif %}
 											</td>
-											<td class="form-group form-inline">
-												<form name="product_form" class="flex-wrap">
-													<input type="hidden" name="product_id" value="{{ Product.id }}">
-													<input type="hidden" name="product_class_id" value="{{ ProductClass.id }}">
-													<input type="hidden" name="price" value="{{ ProductClass.getPrice02 }}">
-													<input type=button value="－" onClick="minus(this)">
-													<input type="text" name="quantity" value="0" size="6" class="counter" onchange="calc()" min="0">
-													<input type=button value="＋" onClick="plus(this)"> 
+										{% endif %}
+									</tr>
+									{% set oldName = ProductClass.getClassCategory1 %}
+								{% endfor %}
 
-												</form>
-											</td>
-											{% if app.isGranted('ROLE_USER') %}
-												<td class="td-right">
-													<span class="sub_total_{{ ProductClass.id }}">¥ 0</span>
-												</td>
-												<td class="td-center pink-heart">
-													{% if ProductClass.id % 2 == 0 %}
-														<i class="far fa-heart"></i>
-													{% else %}
-														<i class="fas fa-heart"></i>
-													{% endif %}
-												</td>
-											{% endif %}
-										</tr>
-										{% set oldName = ProductClass.getClassCategory1 %}
-									{% endfor %}
-									{% if app.isGranted('ROLE_USER') %}
-										<tr>
-											<td colspan="3"></td>
-											<th>合計</th>
-											<th class="td-right">
-												<span class="total">¥ 0</span>
-											</th>
-											<td></td>
-										</tr>
-									{% endif %}
+								{# 最後のテーブルの閉じタグを出力 #}
 								</table>
+
 								{% if app.isGranted('ROLE_USER') %}
+									<h3 class="grand-total">合計 <span class="total">¥ 0</span></h3>
 									<button onclick="AllInCart(); return false;" type="submit" class="btn btn-primary btn-block prevention-btn prevention-mask">カートに入れる</button>
 								{% endif %}
 							</div>
@@ -404,7 +442,7 @@ $(function(){
 											<span class="small">（税抜）</span>
 										</p>
 									{% endif %}
-								{% else -%}
+								{% else %}
 									{# 規格設定がない場合 #}
 									{% if Product.getPrice01Max is not null %}
 										<p id="detail_description_box__normal_price" class="normal_price">
@@ -421,7 +459,7 @@ $(function(){
 										<p class="product_info-price">サロン様価格:
 											{% if app.isGranted('ROLE_USER') %}
 												<span>{{ Product.getPrice02Min|price }}</span>（税抜）
-											{% else -%}
+											{% else %}
 												<span class="font-blue">ログイン後に表示されます</span>
 											{% endif %}
 										</p>
@@ -432,12 +470,12 @@ $(function(){
 												<span class="">{{ Product.getPrice02Min|price }}
 													～
 													{{  Product.getPrice02Max|price }}</span>（税抜）
-											{% else -%}
+											{% else %}
 												<span class="font-blue">ログイン後に表示されます</span>
 											{% endif %}
 										</p>
 									{% endif %}
-								{% else -%}
+								{% else %}
 									{# 規格設定がない場合 #}
 									<p class="product_info-price">サロン様価格:
 										<span>{{ Product.getPrice02Min|price }}</span>（税抜）</p>
