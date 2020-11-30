@@ -104,6 +104,9 @@ $(function(){
 	text-align: center;
 	width:50px;
 }
+.first-tr {
+	background-color: #eeeeee;
+}
 .td-center {
 	text-align: center;
 }
@@ -308,11 +311,22 @@ $(function(){
 											<th>お気に入り</th>
 										{% endif %}
 									</tr>
+									{% set oldName = "" %}
 									{% for ProductClass in Product.ProductClasses %}
-										<tr>
+										{% set newName = ProductClass.getClassCategory1 %}
+										{% if newName != oldName %}
+											<tr class="first-tr">
+										{% else -%}
+											<tr>
+										{% endif %}
+
 											<td>
 												<div class="flex-wrap">
-													<div class="color-box" style="background-color: #{{ ProductClass.ClassCategory1.color }}"></div>
+													{% if ProductClass.ClassCategory1.color is null %}
+														<div class="color-box" style="background-color: #ffffff"></div>
+													{% else -%}
+														<div class="color-box" style="background-color: #{{ ProductClass.ClassCategory1.color }}"></div>
+													{% endif %}
 													{{ ProductClass.getClassCategory1 }}
 												</div>
 											</td>
@@ -350,6 +364,7 @@ $(function(){
 												</td>
 											{% endif %}
 										</tr>
+										{% set oldName = ProductClass.getClassCategory1 %}
 									{% endfor %}
 									{% if app.isGranted('ROLE_USER') %}
 										<tr>
