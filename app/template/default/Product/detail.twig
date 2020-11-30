@@ -228,7 +228,7 @@ $(function(){
 							</div>
 
 
-							<h2>{{ Category.name }}の場合は一覧表示</h2>
+							<h2>※下記表の価格は税抜です。</h2>
 
 							{% if app.isGranted('ROLE_USER') %}
 
@@ -299,12 +299,12 @@ $(function(){
 							<div class="row no-padding mb50">
 								<table class="table table-hover table-condensed color-table" style="width:100%;">
 									<tr>
-										<th>カラー</th>
-										<th width="10%" class="td-center">明度</th>
-										<th width="14%">サロン様価格</th>
-										<th width="14%">数量</th>
+										<th width="40%" >カラー</th>
+										<th width="8%" class="td-center">明度</th>
+										<th width="10%">サロン様価格</th>
+										<th>数量</th>
 										{% if app.isGranted('ROLE_USER') %}
-											<th width="14%" class="td-right">小計</th>
+											<th width="13%" class="td-right">小計</th>
 											<th>お気に入り</th>
 										{% endif %}
 									</tr>
@@ -319,9 +319,9 @@ $(function(){
 											<td class="td-center">
 												{{ ProductClass.getClassCategory2 }}
 											</td>
-											<td>
+											<td class="td-right">
 												{% if app.isGranted('ROLE_USER') %}
-													<span>{{ ProductClass.getPrice02|price }}</span>（税抜）
+													<span>{{ ProductClass.getPrice02|price }}</span>
 												{% else -%}
 													<span class="font-blue">ログイン後に表示されます</span>
 												{% endif %}
@@ -355,9 +355,9 @@ $(function(){
 										<tr>
 											<td colspan="3"></td>
 											<th>合計</th>
-											<td class="td-right">
+											<th class="td-right">
 												<span class="total">¥ 0</span>
-											</td>
+											</th>
 											<td></td>
 										</tr>
 									{% endif %}
@@ -428,8 +428,6 @@ $(function(){
 										<span>{{ Product.getPrice02Min|price }}</span>（税抜）</p>
 								{% endif -%}
 							</div>
-
-							<h2>カラー以外の場合</h2>
 
 							<form action="?" method="post" id="form1" name="form1">
 								<!--▼買い物かご-->
