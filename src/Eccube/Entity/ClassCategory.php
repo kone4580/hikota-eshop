@@ -252,7 +252,7 @@ class ClassCategory extends \Eccube\Entity\AbstractEntity
         }
         return $this->Creator;
 	}
-
+	
     /**
      * @var string
      */
