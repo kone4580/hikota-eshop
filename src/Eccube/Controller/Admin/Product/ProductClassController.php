@@ -675,6 +675,7 @@ class ProductClassController
         $productClassDest->setProduct($productClassOrig->getProduct());
         $productClassDest->setProductType($productClassOrig->getProductType());
         $productClassDest->setCode($productClassOrig->getCode());
+        $productClassDest->setColorName($productClassOrig->getColorName());
         $productClassDest->setStock($productClassOrig->getStock());
         $productClassDest->setStockUnlimited($productClassOrig->getStockUnlimited());
         $productClassDest->setSaleLimit($productClassOrig->getSaleLimit());

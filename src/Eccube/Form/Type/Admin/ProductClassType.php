@@ -54,6 +54,10 @@ class ProductClassType extends AbstractType
                 'label' => '商品コード',
                 'required' => false,
             ))
+            ->add('color_name', 'text', array(
+                'label' => '色コード',
+                'required' => false,
+            ))
             ->add('stock', 'number', array(
                 'label' => '在庫数',
                 'required' => false,
