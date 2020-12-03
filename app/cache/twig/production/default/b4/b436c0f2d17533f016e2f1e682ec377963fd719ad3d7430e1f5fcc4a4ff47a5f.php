@@ -342,6 +342,6 @@ class __TwigTemplate_7efa15d388fa32577e5934cae6e44ec5e50ecea1e5ca7c263fbfed22ad0
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "Block/common_header.twig", "/Volumes/LaCie/MAMP/eccube-3/app/template/default/Block/common_header.twig");
+        return new Twig_Source("", "Block/common_header.twig", "/Applications/MAMP/htdocs/hikota-eshop/app/template/default/Block/common_header.twig");
     }
 }

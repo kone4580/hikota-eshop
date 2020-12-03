@@ -1,0 +1,9 @@
+database:
+    driver: 'pdo_mysql'
+    host: 'mysql015.phy.heteml.lan'
+    dbname: '_hikota_eshop'
+    port: '3306'
+    user: '_hikota_eshop'
+    password : 'eshop123'
+    charset: utf8
+    defaultTableOptions: { collate: utf8_general_ci }

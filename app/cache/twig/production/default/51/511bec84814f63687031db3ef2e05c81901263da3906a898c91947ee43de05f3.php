@@ -144,6 +144,6 @@ class __TwigTemplate_df032b07c07544137d21b43102ccfa6fdb8d9e9ce0daaab1e4a0a7746a4
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "Block/new_product.twig", "/Volumes/LaCie/MAMP/eccube-3/app/template/default/Block/new_product.twig");
+        return new Twig_Source("", "Block/new_product.twig", "/Applications/MAMP/htdocs/hikota-eshop/app/template/default/Block/new_product.twig");
     }
 }

@@ -69,6 +69,6 @@ class __TwigTemplate_23444f65953b534a8642103c0357d18ff4af2781dc3db8a47fdc89aec8b
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "Block/for_beginner.twig", "/Volumes/LaCie/MAMP/eccube-3/app/template/default/Block/for_beginner.twig");
+        return new Twig_Source("", "Block/for_beginner.twig", "/Applications/MAMP/htdocs/hikota-eshop/app/template/default/Block/for_beginner.twig");
     }
 }

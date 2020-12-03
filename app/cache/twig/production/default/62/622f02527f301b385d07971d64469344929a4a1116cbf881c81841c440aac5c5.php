@@ -64,6 +64,6 @@ class __TwigTemplate_ff142445c5dfe89cfd0005533c0a4bd38b2705a6012e8eca07f56fc7840
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "Block/footer_up.twig", "/Volumes/LaCie/MAMP/eccube-3/app/template/default/Block/footer_up.twig");
+        return new Twig_Source("", "Block/footer_up.twig", "/Applications/MAMP/htdocs/hikota-eshop/app/template/default/Block/footer_up.twig");
     }
 }

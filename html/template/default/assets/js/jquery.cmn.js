@@ -2,6 +2,7 @@ $(window).on('load', function() {
 	_clickDrop();
 	_setViewmore();
 	_animation();
+	colorDrop();
 	if ($(window).width() < 768) {
 		_setSpMenu();
 	}
@@ -163,4 +164,12 @@ function setTopSlider() {
     infiniteLoop: true,
     slideMargin: 0,
   });
+}
+
+function colorDrop() {
+	$('.acd-label').on('click', function () {
+	  var t = $(this);
+	  t.toggleClass('isShow');
+		t.next('.color-table').slideToggle(300);
+	});
 }

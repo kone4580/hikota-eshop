@@ -486,6 +486,6 @@ var swiper = new Swiper('.swiper-container', {
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "default_frame.twig", "/Volumes/LaCie/MAMP/eccube-3/src/Eccube/Resource/template/default/default_frame.twig");
+        return new Twig_Source("", "default_frame.twig", "/Applications/MAMP/htdocs/hikota-eshop/src/Eccube/Resource/template/default/default_frame.twig");
     }
 }
