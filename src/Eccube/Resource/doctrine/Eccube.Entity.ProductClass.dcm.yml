@@ -67,6 +67,9 @@ Eccube\Entity\ProductClass:
             unsigned: false
             options:
                 default: '0'
+        color_name:
+            type: text
+            nullable: true
     manyToOne:
         Product:
             targetEntity: Eccube\Entity\Product

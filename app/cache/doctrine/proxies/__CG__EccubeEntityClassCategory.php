@@ -64,10 +64,10 @@ class ClassCategory extends \Eccube\Entity\ClassCategory implements \Doctrine\OR
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'id', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'name', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'rank', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'create_date', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'update_date', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'del_flg', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'ClassName', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'Creator', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'color');
+            return array('__isInitialized__', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'id', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'name', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'rank', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'create_date', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'update_date', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'del_flg', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'ClassName', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'Creator', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'color_code');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'id', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'name', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'rank', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'create_date', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'update_date', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'del_flg', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'ClassName', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'Creator', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'color');
+        return array('__isInitialized__', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'id', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'name', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'rank', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'create_date', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'update_date', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'del_flg', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'ClassName', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'Creator', '' . "\0" . 'Eccube\\Entity\\ClassCategory' . "\0" . 'color_code');
     }
 
     /**
@@ -356,23 +356,23 @@ class ClassCategory extends \Eccube\Entity\ClassCategory implements \Doctrine\OR
     /**
      * {@inheritDoc}
      */
-    public function setColor($color)
+    public function setColorCode($colorCode)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setColor', array($color));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setColorCode', array($colorCode));
 
-        return parent::setColor($color);
+        return parent::setColorCode($colorCode);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getColor()
+    public function getColorCode()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getColor', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getColorCode', array());
 
-        return parent::getColor();
+        return parent::getColorCode();
     }
 
     /**

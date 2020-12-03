@@ -15,7 +15,7 @@ Eccube\Entity\ClassCategory:
         name:
             type: text
             nullable: false
-        color:
+        color_code:
             type: text
             nullable: true
         rank:

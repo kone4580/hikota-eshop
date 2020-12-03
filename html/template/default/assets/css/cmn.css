@@ -14,7 +14,7 @@ html {
 
 body {
   font-size: 1.5em;
-  background: #FFF;
+  background: #fff;
   font-family: -apple-system-body, BlinkMacSystemFont, "游ゴシック Medium", YuGothic, "游ゴシック体", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, "Yu Gothic Medium", Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
   line-height: 1.8;
   padding: 0;
@@ -22,14 +22,21 @@ body {
   vertical-align: baseline;
   height: 100%; }
 
-select, input, button, textarea {
+select,
+input,
+button,
+textarea {
   font: 99% sans-serif; }
 
 table {
   font-size: inherit;
   font: 100%; }
 
-pre, code, kbd, samp, tt {
+pre,
+code,
+kbd,
+samp,
+tt {
   font-family: monospace;
   *font-size: 108%;
   line-height: 100%; }
@@ -38,7 +45,9 @@ img {
   max-width: 100%;
   height: auto; }
 
-*, ::before, ::after {
+*,
+::before,
+::after {
   background-repeat: no-repeat;
   -webkit-box-sizing: inherit;
   box-sizing: inherit; }
@@ -119,11 +128,11 @@ a:hover {
 
 .text2 {
   font-weight: bold;
-  color: #F00; }
+  color: #f00; }
 
 .text3 {
   font-weight: bold;
-  color: #DC009E; }
+  color: #dc009e; }
 
 .text4 {
   color: #004879; }
@@ -195,7 +204,7 @@ a:hover {
       #header .header_top .header_links a:first-child::after {
         width: 1px;
         display: block;
-        content: '';
+        content: "";
         height: 60%;
         top: 20%;
         right: 0;
@@ -273,7 +282,7 @@ a:hover {
             z-index: 3;
             cursor: pointer; }
             #header .header_inner .search_form .search_form_input .input-group-btn .btn-search:hover {
-              opacity: .8; }
+              opacity: 0.8; }
     #header .header_inner .icon_links {
       display: -webkit-box;
       display: -ms-flexbox;
@@ -327,7 +336,7 @@ a:hover {
       top: 0;
       left: 0;
       z-index: 2;
-      animation: fixed-header .3s ease;
+      animation: fixed-header 0.3s ease;
       background-color: #fff;
       border-bottom: 1px #ddd solid;
       height: 68px; }
@@ -374,8 +383,8 @@ a:hover {
       opacity: 1;
       -webkit-transition-property: opacity;
       transition-property: opacity;
-      -webkit-transition-duration: .15s;
-      transition-duration: .15s;
+      -webkit-transition-duration: 0.15s;
+      transition-duration: 0.15s;
       -webkit-transition-timing-function: ease-out;
       transition-timing-function: ease-out;
       width: 90%;
@@ -464,7 +473,7 @@ a:hover {
 
 @media (min-width: 768px) {
   .megamenu {
-    transition: all .2s ease-in;
+    transition: all 0.2s ease-in;
     max-height: 0;
     opacity: 0;
     overflow: hidden;
@@ -537,7 +546,7 @@ a:hover {
     left: 8px;
     width: 40px;
     z-index: 3;
-    transition: all .3s ease; }
+    transition: all 0.3s ease; }
     .menuBtn.menu-open {
       display: none; } }
 
@@ -550,7 +559,7 @@ a:hover {
   background: rgba(0, 0, 0, 0.6);
   z-index: 4;
   display: none;
-  transition: all .3s ease; }
+  transition: all 0.3s ease; }
   .navi_overlay.menu-open {
     display: block; }
 
@@ -634,7 +643,9 @@ a:hover {
   #nav-open span {
     margin-top: -7px; }
 
-  #nav-open span, #nav-open span:before, #nav-open span:after {
+  #nav-open span,
+  #nav-open span:before,
+  #nav-open span:after {
     position: absolute;
     height: 2px;
     /*線の太さ*/
@@ -643,7 +654,7 @@ a:hover {
     border-radius: 3px;
     background: #fff;
     display: block;
-    content: '';
+    content: "";
     cursor: pointer;
     transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1); }
 
@@ -665,7 +676,7 @@ a:hover {
     position: absolute;
     top: 6px;
     left: 0;
-    content: ' '; }
+    content: " "; }
 
   .menu-open #nav-open span::before {
     -webkit-transform: rotate(45deg);
@@ -688,7 +699,7 @@ a:hover {
     width: calc(100% - 60px);
     height: auto;
     z-index: 5;
-    transition: all ease .5s;
+    transition: all ease 0.5s;
     height: 100%;
     overflow: auto; }
     .naviBox.active {
@@ -800,7 +811,7 @@ a:hover {
     text-decoration: underline; }
 
 .copyright {
-  font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: Segoe UI, SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1;
@@ -830,7 +841,7 @@ a:hover {
       .heading1 h2 {
         font-size: 1.8rem; } }
   .heading1 .en_title {
-    font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: Segoe UI, SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1.6rem;
     font-weight: 700;
     color: #2f8dd5;
@@ -850,7 +861,7 @@ a:hover {
       font-size: 1.9rem; } }
 
 .title1::after {
-  content: '';
+  content: "";
   height: 1px;
   background-color: #7d7d7d;
   margin: 13px auto 40px;
@@ -875,7 +886,7 @@ a:hover {
   text-align: center; }
 
 .title3::after {
-  content: '';
+  content: "";
   height: 1px;
   background-color: #ccc;
   margin: 10px auto 30px;
@@ -906,7 +917,7 @@ a:hover {
       font-size: 1.8rem; } }
   .title5::before {
     display: block;
-    content: '';
+    content: "";
     width: 5px;
     height: 30px;
     background-color: #0e52a2;
@@ -927,7 +938,7 @@ a:hover {
       font-size: 1.6rem; } }
   .title6::before {
     display: inline-block;
-    content: '';
+    content: "";
     width: 12px;
     height: 12px;
     background-color: #2f8dd5;
@@ -949,7 +960,7 @@ a:hover {
       margin-bottom: 17px; } }
   .title7::before {
     display: block;
-    content: '';
+    content: "";
     width: 5px;
     height: 100%;
     background-color: #0e52a2;
@@ -1000,7 +1011,7 @@ a:hover {
       text-align: center;
       font-size: 1.8rem; }
       .btn-red:hover {
-        opacity: .8;
+        opacity: 0.8;
         color: #fff; } }
   @media (max-width: 768px) {
     .btn-red {
@@ -1084,7 +1095,7 @@ HOME
     top: 6px;
     background-color: #e778af;
     display: block;
-    content: ''; }
+    content: ""; }
 
 .shortwrap {
   max-width: 856px;
@@ -1125,7 +1136,9 @@ HOME
     #mainVisual {
       margin-top: 25px; } }
 
-.swiper-container, .swiper-wrapper, .swiper-slide {
+.swiper-container,
+.swiper-wrapper,
+.swiper-slide {
   height: 100%; }
 
 .top-contents {
@@ -1178,7 +1191,7 @@ HOME
   justify-content: center;
   flex-direction: column-reverse; }
   .top-center-title .eng {
-    font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: Segoe UI, SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 3.3rem;
     font-weight: 700;
     line-height: 1.2; }
@@ -1261,7 +1274,7 @@ HOME
       width: 40px;
       height: 40px;
       line-height: 40px;
-      font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+      font-family: Segoe UI, SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
       font-size: 1.6rem;
       font-weight: 700;
       color: #fff;
@@ -1295,7 +1308,7 @@ HOME
         .product_list-info dt {
           width: 50px; } }
       .product_list-info dt::after {
-        content: ':'; }
+        content: ":"; }
     .product_list-info dd {
       font-size: 1.4rem; }
       @media (max-width: 768px) {
@@ -1308,7 +1321,7 @@ HOME
   overflow: hidden; }
   .prod_img:before {
     display: block;
-    content: '';
+    content: "";
     padding-top: 100%; }
   .prod_img .imgContent {
     position: absolute;
@@ -1327,7 +1340,7 @@ HOME
       right: 0;
       bottom: 0;
       margin: auto;
-      transition: all .3s ease;
+      transition: all 0.3s ease;
       transform: scale(1); }
 
 .brand_list {
@@ -1390,7 +1403,7 @@ HOME
   -ms-transition: all 666ms 0.1s cubic-bezier(0.165, 0.84, 0.44, 1);
   transition: all 666ms 0.1s cubic-bezier(0.165, 0.84, 0.44, 1);
   cursor: pointer;
-  font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: Segoe UI, SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 1.6rem;
   font-weight: 400; }
   .more-btn:hover {
@@ -1467,7 +1480,7 @@ HOME
         background-color: #ed1e79;
         text-align: center;
         padding: 7px 0;
-        font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-family: Segoe UI, SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-size: 1.5rem;
         font-weight: 700;
         color: #fff; }
@@ -1517,7 +1530,7 @@ HOME
         font-weight: normal; }
         .bottomInfo .inner .foot_num p.num {
           line-height: 1;
-          font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+          font-family: Segoe UI, SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif;
           font-size: 3rem;
           font-weight: 700; }
     .bottomInfo .inner .foot-contact {
@@ -1528,12 +1541,12 @@ HOME
       padding: 10px 0;
       border-radius: 5px;
       color: #333;
-      transition: opacity .3s ease; }
+      transition: opacity 0.3s ease; }
       @media (max-width: 768px) {
         .bottomInfo .inner .foot-contact {
           margin: 15px auto 0; } }
       .bottomInfo .inner .foot-contact:hover {
-        opacity: .8; }
+        opacity: 0.8; }
 
 .breadcrumbs {
   width: 100%;
@@ -1543,7 +1556,7 @@ HOME
     display: inline-block;
     font-weight: normal; }
     .breadcrumbs a::after {
-      content: '>';
+      content: ">";
       display: inline-block;
       padding: 0 0 0 5px; }
 
@@ -1623,7 +1636,7 @@ HOME
       padding: 0;
       position: relative; }
       .product_info-table dl dd::before {
-        content: '：'; }
+        content: "："; }
 .product_info-pricezone {
   padding-top: 20px;
   border-top: 1px #ccc solid;
@@ -1910,7 +1923,7 @@ HOME
     top: 50%;
     margin-top: -12px;
     line-height: 1;
-    transition: all .3s ease; }
+    transition: all 0.3s ease; }
 
 .isShow .flex-wrap i {
   transform: rotate(180deg);
@@ -1929,12 +1942,16 @@ HOME
 .th-level {
   width: 10%; }
 
+.th-code {
+  width: 20%;
+  text-align: center; }
+
 .th-price {
-  width: 40%;
+  width: 30%;
   text-align: right; }
 
 .th-count {
-  width: 40%;
+  width: 30%;
   text-align: center; }
 
 .th-sub_total {
@@ -1945,6 +1962,9 @@ HOME
   width: 50px; }
 
 .td-level {
+  text-align: center; }
+
+.td-code {
   text-align: center; }
 
 .td-price {
@@ -1965,9 +1985,11 @@ HOME
 
 .color-table {
   width: 100%; }
-  .color-table thead th, .color-table thead td {
+  .color-table thead th,
+  .color-table thead td {
     vertical-align: middle; }
-  .color-table tbody th, .color-table tbody td {
+  .color-table tbody th,
+  .color-table tbody td {
     vertical-align: middle; }
   .color-table tbody th {
     font-size: 1.3rem; }

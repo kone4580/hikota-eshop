@@ -256,28 +256,28 @@ class ClassCategory extends \Eccube\Entity\AbstractEntity
     /**
      * @var string
      */
-    private $color;
+    private $color_code;
 
     /**
-     * Set color
+     * Set color_code
      *
-     * @param string $color
+     * @param string $colorCode
      * @return ClassCategory
      */
-    public function setColor($color)
+    public function setColorCode($colorCode)
     {
-        $this->color = $color;
+        $this->color_code = $colorCode;
 
         return $this;
     }
 
     /**
-     * Get color
+     * Get color_code
      *
      * @return string 
      */
-    public function getColor()
+    public function getColorCode()
     {
-        return $this->color;
+        return $this->color_code;
     }
 }

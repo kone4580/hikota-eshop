@@ -1,14 +1,43 @@
-# ターミナル操作
+################################
+# 1.マイグレーションファイル作成
+################################
 
-## 1.eccubeカレントディレクトリに移動
+マイグレーションファイル作成の実施は開発者のみでOK
+環境を揃えるためならマイグレーションのみ
+
+## 1.1 dcm.ymlの編集
+/src/Eccube/Resource/doctrine/
+Eccube.Entity.*****.dcm.yml
+を編集
+
+## 1.2 Entityの更新
+編集したymlファイルをベースに下記コマンドでEntityファイルを更新
+cd /Applications/MAMP/htdocs//hikota-eshop/
+vendor/bin/doctrine orm:generate:entities --extend="Eccube\Entity\AbstractEntity" src
+
+/src/Eccube/Entity/
+*****.php
+が更新されていることを確認
+
+## 1.3 マイグレーションファイル生成
+php app/console migrations:diff
+
+src/Eccube/Resource/doctrine/migration/VersionYYYMMDDhhmmss.php
+DROP INDEXとCREATE INDEXの処理は不要な変更なので削除
+
+################################
+# 2.テーブル定義変更
+################################
+## 2.1 eccubeカレントディレクトリに移動
 cd /Applications/MAMP/htdocs//hikota-eshop/
 
-## 2.migration実施
+## 2.2 migration実施
 php app/console migrations:migrate
 
-## 3.phpMyAdmin等でテーブル定義の変更を確認
+## 2.3 phpMyAdmin等でテーブル定義の変更を確認
 
-
+################################
 # ローカルの新規会員登録済みユーザー
+################################
 ID：eccube@test.com
 PW：testtest

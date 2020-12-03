@@ -702,4 +702,32 @@ class ProductClass extends \Eccube\Entity\AbstractEntity
     {
         return $this->TaxRule;
     }
+
+	/**
+     * @var string
+     */
+    private $color_name;
+
+    /**
+     * Set color_name
+     *
+     * @param string $colorName
+     * @return ProductClass
+     */
+    public function setColorName($colorName)
+    {
+        $this->color_name = $colorName;
+
+        return $this;
+    }
+
+    /**
+     * Get color_name
+     *
+     * @return string 
+     */
+    public function getColorName()
+    {
+        return $this->color_name;
+    }
 }
