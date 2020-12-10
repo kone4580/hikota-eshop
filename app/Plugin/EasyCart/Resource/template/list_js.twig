@@ -1,0 +1,51 @@
+<script>
+    function ajaxView(id) {
+        var form = {};
+        form['product_id'] = id;
+
+        $.ajax({
+            url: '{{ url('plugin_EasyCart_ajaxDetail') }}',
+            method: 'post',
+            dataType: 'json',
+            data: form
+        }).done(function( res ) {
+            if (res.class_categories) {
+                eccube.classCategories = res.class_categories;
+            }
+            if (res.detail) {
+                $.colorbox({
+                    maxWidth: "80%",
+                    maxHeight: "80%",
+                    html: res.detail
+                });
+            }
+
+        }).fail(function() {
+            alert('システムエラーが発生しました。');
+        }).complete(function(data) {
+        });
+
+        return false;
+    }
+
+    $(window).resize(function() {
+        if (!$('#item_detail').length) {
+            return false;
+        }
+
+        $.colorbox.resize({
+            width: "80%",
+            height: "80%"
+        });
+    });
+
+    function goCart() {
+        location.href = '{{ url('cart') }}';
+    }
+
+    function closeCart() {
+        $('.cart').removeClass('is-visible');
+        $('.cart-trigger').removeClass('cart-is-visible');
+        $('.overlay').removeClass('cart-is-visible');
+    }
+</script>

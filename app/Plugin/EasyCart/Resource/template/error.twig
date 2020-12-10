@@ -1,0 +1,21 @@
+{#
+This file is part of the EasyCart
+
+ Copyright (C) 2016 IDS Corporation
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+#}
+
+{% block main %}
+<div id="default_error_wrap" class="detail_view container-fluid">
+    <div id="default_error_box" class="message_box">
+        <div id="default_error_box__body" class="row no-padding">
+            <div id="default_error__message">
+                <div class="icon"><svg class="cb cb-warning"><use xlink:href="#cb-warning" /></svg></div>
+                <p class="errormsg bg-danger">{{ error_message }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

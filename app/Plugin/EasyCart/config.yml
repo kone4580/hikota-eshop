@@ -1,0 +1,6 @@
+name: 続けてカートイン
+code: EasyCart
+version: 1.0.1
+event: EasyCartEvent
+service:
+    - EasyCartServiceProvider

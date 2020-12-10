@@ -1,0 +1,319 @@
+{#
+This file is part of the EasyCart
+
+ Copyright (C) 2016 IDS Corporation
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+#}
+
+{% block javascript %}
+<script>
+    eccube.classCategories = {{ Product.class_categories|json_encode|raw }};
+
+    // 規格2に選択肢を割り当てる。
+    function fnSetClassCategories(form, classcat_id2_selected) {
+        var $form = $(form);
+        var product_id = $form.find('input[name=product_id]').val();
+        var $sele1 = $form.find('select[name=classcategory_id1]');
+        var $sele2 = $form.find('select[name=classcategory_id2]');
+        eccube.setClassCategories($form, product_id, $sele1, $sele2, classcat_id2_selected);
+    }
+
+    {% if form.classcategory_id2 is defined %}
+    fnSetClassCategories(
+            document.view_form, {{ form.classcategory_id2.vars.value|json_encode|raw }}
+    );
+    {% endif %}
+
+    // 規格2に選択肢を割り当てる。
+    function fnSetClassCategories(form, classcat_id2_selected) {
+        var $form = $(form);
+        var product_id = $form.find('input[name=product_id]').val();
+        var $sele1 = $form.find('select[name=classcategory_id1]');
+        var $sele2 = $form.find('select[name=classcategory_id2]');
+        eccube.setClassCategories($form, product_id, $sele1, $sele2, classcat_id2_selected);
+    }
+
+    var cloneBtn = '';
+    $(function(){
+        $('select[name=classcategory_id1]').change(function() {
+            var $form = $(this).parents('form');
+            var product_id = $form.find('input[name=product_id]').val();
+            var $sele1 = $(this);
+            var $sele2 = $form.find('select[name=classcategory_id2]');
+
+            // 規格1のみの場合
+            if (!$sele2.length) {
+                eccube.checkStock($form, product_id, $sele1.val(), null);
+                // 規格2ありの場合
+            } else {
+                eccube.setClassCategories($form, product_id, $sele1, $sele2);
+            }
+        });
+
+        // 規格2選択時
+        $('select[name=classcategory_id2]').change(function() {
+            var $form = $(this).parents('form');
+            var product_id = $form.find('input[name=product_id]').val();
+            var $sele1 = $form.find('select[name=classcategory_id1]');
+            var $sele2 = $(this);
+            eccube.checkStock($form, product_id, $sele1.val(), $sele2.val());
+        });
+
+        $('#view_form').submit(function() {
+            $('.ajaxError').remove();
+            $('#ajax_mode').val('ajax_cart');
+
+            var form = $('#view_form').get()[0];
+            var formData = new FormData(form);
+
+            $.ajax({
+                url: '{{ url('plugin_EasyCart_ajaxCart') }}',
+                method: 'post',
+                dataType: 'json',
+                data: formData,
+                processData: false,
+                contentType: false
+            }).done(function( res ) {
+                if (res.success) {
+                    $('#add-cart').after('<button type="button" id="go-cart" class="btn btn-success btn-block prevention-btn" onclick="goCart();">カートに追加しました。</button>');
+                    $('#add-cart').remove();
+                    $('#cart_area .badge').html(res.totalQty);
+                    $('#cart_area .price').html(res.totalPrice);
+                    $('#cart .inner').html(res.blockCart);
+                }
+                else if (res.error) {
+                    var key = '';
+                    for (key in res.error) {
+                        writeErrMsg(key, res.error[key]);
+                    }
+                }
+                else {
+                    alert('カート処理に失敗しました。');
+                }
+            }).fail(function() {
+                alert('システムエラーが発生しました。');
+            }).complete(function(data) {
+                $('.prevention-masked').remove();
+                $('#add-cart').prop('disabled', false);
+                $('#ajax_mode').val('');
+            });
+
+            return false;
+        });
+
+        {% if form.classcategory_id1 is defined %}
+        cloneBtn = $('#add-cart').clone();
+        {% endif %}
+
+        $('.carousel').slick({
+            infinite: false,
+            speed: 300,
+            prevArrow:'<button type="button" class="slick-prev"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
+            nextArrow:'<button type="button" class="slick-next"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
+            slidesToShow: 4,
+            slidesToScroll: 4
+        });
+
+        $('#item_photo_area .slides').slick({
+            dots: true,
+            infinite: true,
+            arrows: false,
+            speed: 0
+        });
+{% if Product.ProductImage|length > 0 %}
+        $('.slick-track').css('width', '100%');
+        $('#detail_image_box__item--1').css('width', '100%');
+        $('#detail_image_box__item--1').prop('aria-hidden', false);
+{% endif %}
+
+        $('select[name=classcategory_id1]').change(function() {
+            if (!($('#go-cart').length)) {
+                return;
+            }
+            restoreCartBtn();
+        });
+
+        $('select[name=classcategory_id2]').change(function() {
+            if (!($('#go-cart').length)) {
+                return;
+            }
+            restoreCartBtn();
+        });
+    });
+
+    function restoreCartBtn() {
+        $('#go-cart').after(cloneBtn);
+        $('#go-cart').remove();
+    }
+
+    function writeErrMsg(key, msg) {
+        var id = $('#' + key).length ? key : 'detail_description_box__name';
+
+        $('#' + id).after(
+                '<div id="cart_box__message_error--"' + key + ' class="ajaxError message">'
+                + '<p class="errormsg bg-danger">'
+                + '<svg class="cb cb-warning"><use xlink:href="#cb-warning" /></svg>'
+                + msg.replace('\n', '<br>')
+                + '</p>'
+                + '</div>'
+        );
+    }
+</script>
+{% endblock %}
+
+{% block main %}
+    <!-- ▼item_detail▼ -->
+    <div id="item_detail">
+        <div id="detail_wrap">
+            <section id="item_detail_area" class="col-sm-12">
+                <!--★商品名★-->
+                <h3 id="detail_description_box__name" class="item_name">{{ Product.name }}</h3>
+                <div id="detail_description_box__body" class="item_detail">
+
+                    {% if Product.ProductTag is not empty %}
+                        <!--▼商品タグ-->
+                        <div id="product_tag_box" class="product_tag">
+                            {% for ProductTag in Product.ProductTag %}
+                                <span id="product_tag_box__product_tag--{{ ProductTag.Tag.id }}" class="product_tag_list">{{ ProductTag.Tag }}</span>
+                            {% endfor %}
+                        </div>
+                        <hr>
+                        <!--▲商品タグ-->
+                    {% endif %}
+
+                    <!--★通常価格★-->
+                    {% if Product.hasProductClass -%}
+                        {% if Product.getPrice01Min is not null and Product.getPrice01Min == Product.getPrice01Max %}
+                        <p id="detail_description_box__class_normal_price" class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01IncTaxMin|price }}</span> <span class="small">税込</span></p>
+                        {% elseif Product.getPrice01Min is not null and Product.getPrice01Max is not null %}
+                        <p id="detail_description_box__class_normal_range_price" class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01IncTaxMin|price }} ～ {{ Product.getPrice01IncTaxMax|price }}</span> <span class="small">税込</span></p>
+                        {% endif %}
+                    {% else -%}
+                        {% if Product.getPrice01Max is not null %}
+                        <p id="detail_description_box__normal_price" class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01IncTaxMin|price }}</span> <span class="small">税込</span></p>
+                        {% endif %}
+                    {% endif -%}
+
+                    <!--★販売価格★-->
+                    {% if Product.hasProductClass -%}
+                        {% if Product.getPrice02Min == Product.getPrice02Max %}
+                        <p id="detail_description_box__class_sale_price" class="sale_price text-primary"> <span class="price02_default">{{ Product.getPrice02IncTaxMin|price }}</span> <span class="small">税込</span></p>
+                        {% else %}
+                        <p id="detail_description_box__class_range_sale_price" class="sale_price text-primary"> <span class="price02_default">{{ Product.getPrice02IncTaxMin|price }} ～ {{  Product.getPrice02IncTaxMax|price }}</span> <span class="small">税込</span></p>
+                        {% endif %}
+                    {% else -%}
+                        <p id="detail_description_box__sale_price" class="sale_price text-primary"> <span class="price02_default">{{ Product.getPrice02IncTaxMin|price }}</span> <span class="small">税込</span></p>
+                    {% endif -%}
+
+                    <!--▼商品コード-->
+                    <p id="detail_description_box__item_range_code" class="item_code">商品コード： <span id="item_code_default">
+                        {{ Product.code_min }}
+                        {% if Product.code_min != Product.code_max %} ～ {{ Product.code_max }}{% endif %}
+                        </span> </p>
+                    <!--▲商品コード-->
+
+                    <form action="?" method="post" id="view_form" name="form1">
+                        <!--▼買い物かご-->
+                        <div id="detail_cart_box" class="cart_area">
+                            {% if Product.stock_find %}
+
+                                {# 規格 #}
+                                {% if form.classcategory_id1 is defined %}
+                                <ul id="detail_cart_box__cart_class_category_id" class="classcategory_list">
+                                    {# 規格1 #}
+                                    <li>
+                                        {{ form_widget(form.classcategory_id1) }}
+                                        {{ form_errors(form.classcategory_id1) }}
+                                    </li>
+                                    {# 規格2 #}
+                                    {% if form.classcategory_id2 is defined %}
+                                        <li>
+                                            {{ form_widget(form.classcategory_id2) }}
+                                            {{ form_errors(form.classcategory_id2) }}
+                                        </li>
+                                     {% endif %}
+                                </ul>
+                                {% endif %}
+
+                                {# 数量 #}
+                                <dl id="detail_cart_box__cart_quantity" class="quantity">
+                                    <dt>数量</dt>
+                                    <dd>
+                                        {{ form_widget(form.quantity) }}
+                                        {{ form_errors(form.quantity) }}
+                                    </dd>
+                                </dl>
+
+                                <div class="extra-form">
+                                    {% for f in form.getIterator %}
+                                        {% if f.vars.name matches '[^plg*]' %}
+                                            {{ form_row(f) }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+
+                                {# カートボタン #}
+                                <div id="detail_cart_box__button_area" class="btn_area">
+                                    <ul id="detail_cart_box__insert_button" class="row">
+                                        <li class="col-xs-12 col-sm-12"><button type="submit" id="add-cart" class="btn btn-primary btn-block prevention-btn prevention-mask">カートに入れる</button></li>
+                                    </ul>
+                                </div>
+                            {% else %}
+                                {# 在庫がない場合は品切れボタンのみ表示 #}
+                                <div id="detail_cart_box__button_area" class="btn_area">
+                                    <ul class="row">
+                                        <li class="col-xs-12 col-sm-12"><button type="button" class="btn btn-default btn-block" disabled="disabled">ただいま品切れ中です</button></li>
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <!--▲買い物かご-->
+                        {{ form_rest(form) }}
+                    </form>
+
+                    <!-- ▼関連カテゴリ▼ -->
+                    <div id="relative_category_box" class="relative_cat">
+                        <p>関連カテゴリ</p>
+                          {% for ProductCategory in Product.ProductCategories %}
+                        <ol id="relative_category_box__relative_category--{{ ProductCategory.product_id }}_{{ loop.index }}">
+                            {% for Category in ProductCategory.Category.path %}
+                            <li><a id="relative_category_box__relative_category--{{ ProductCategory.product_id }}_{{ loop.parent.loop.index }}_{{ Category.id }}" href="{{ url('product_list') }}?category_id={{ Category.id }}">{{ Category.name }}</a></li>
+                            {% endfor %}
+                        </ol>
+                        {% endfor %}
+                    </div>
+                    <!-- ▲関連カテゴリ▲ -->
+
+                    <!--★商品説明★-->
+                    <p id="detail_not_stock_box__description_detail" class="item_comment">{{ Product.description_detail|raw|nl2br }}</p>
+                </div>
+                <!-- /.item_detail -->
+                <!--★画像★-->
+                <div id="item_photo_area" class="detail_view col-xs-12">
+                    <div id="detail_image_box__slides" class="slides col-xs-10">
+                        {% if Product.ProductImage|length > 0 %}
+                            {% for ProductImage in Product.ProductImage %}
+                            <div id="detail_image_box__item--{{ loop.index }}"><img src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}"/></div>
+                            {% endfor %}
+                        {% else %}
+                            <div id="detail_image_box__item"><img src="{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}"/></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+            <!--詳細ここまで-->
+        </div>
+
+        {# フリーエリア #}
+        {% if Product.freearea %}
+        <div id="sub_area" class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div id="detail_free_box__freearea" class="freearea">{{ include(template_from_string(Product.freearea)) }}</div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <!-- ▲item_detail▲ -->
+{% endblock %}
