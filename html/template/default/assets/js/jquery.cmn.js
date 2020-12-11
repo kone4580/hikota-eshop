@@ -167,9 +167,9 @@ function setTopSlider() {
 }
 
 function colorDrop() {
-	$('.acd-label').on('click', function () {
-	  var t = $(this);
-	  t.toggleClass('isShow');
-		t.next('.color-table').slideToggle(300);
-	});
+	// $('.acd-label').on('click', function () {
+	//   var t = $(this);
+	//   t.toggleClass('isShow');
+	// 	t.next('.color-table').slideToggle(300);
+	// });
 }

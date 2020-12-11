@@ -24,54 +24,6 @@
     {% endif %}
 </script>
 
-<script>
-	$(function () {
-		$('.carousel').slick({
-			infinite: false,
-			speed: 300,
-			prevArrow: '<button type="button" class="slick-prev"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
-			nextArrow: '<button type="button" class="slick-next"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
-			slidesToShow: 4,
-			slidesToScroll: 4,
-			responsive: [
-				{
-					breakpoint: 768,
-					settings: {
-						slidesToShow: 3,
-						slidesToScroll: 3
-					}
-				}
-			]
-		});
-
-		$('.slides').slick({
-			dots: true,
-			arrows: false,
-			speed: 300,
-			customPaging: function (slider, i) {
-				return '<button class="thumbnail">' + $(slider.$slides[i]).find('img').prop('outerHTML') + '</button>';
-			}
-		});
-
-		$('#favorite').click(function() {
-			console.log("#favorite.click");
-			$('#mode').val('add_favorite');
-		});
-
-		$('#add-cart').click(function() {
-			console.log("#add-cart.click");
-			$('#mode').val('add_cart');
-		});
-
-		// bfcache無効化
-		$(window).bind('pageshow', function (event) {
-			if (event.originalEvent.persisted) {
-				location.reload(true);
-			}
-		});
-	});
-</script>
-
 {% endblock %}
 
 
@@ -165,6 +117,64 @@
 					{% for Category in ProductCategory.Category.path if not break %}
 						{% if Category.id == 7 %}
 							{# 商品のカテゴリーにカラーが含められている場合（category_id が 7） #}
+
+{# <form name="form1" id="form1" method="get" action="?">
+	<input type="hidden" id="mode" name="mode" />
+	<input type="hidden" value="" id="category_id" name="category_id" />
+	<input type="hidden" id="name" name="name" maxlength="50" />
+	<input type="hidden" id="pageno" name="pageno" />
+	<input type="hidden" value="15" id="disp_number" name="disp_number" />
+	<input type="hidden" value="1" id="orderby" name="orderby" />
+</form> #}
+
+							<script>
+								$(function () {
+									$('.carousel').slick({
+										infinite: false,
+										speed: 300,
+										prevArrow: '<button type="button" class="slick-prev"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
+										nextArrow: '<button type="button" class="slick-next"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
+										slidesToShow: 4,
+										slidesToScroll: 4,
+										responsive: [
+											{
+												breakpoint: 768,
+												settings: {
+													slidesToShow: 3,
+													slidesToScroll: 3
+												}
+											}
+										]
+									});
+
+									$('.slides').slick({
+										dots: true,
+										arrows: false,
+										speed: 300,
+										customPaging: function (slider, i) {
+											return '<button class="thumbnail">' + $(slider.$slides[i]).find('img').prop('outerHTML') + '</button>';
+										}
+									});
+
+									// カラー時の差分
+									$('#favorite').click(function () {
+										$('#mode').val('add_favorite_class');
+									});
+
+									$('#add-cart').click(function () {
+										$('#mode').val('add_cart');
+									});
+
+									// bfcache無効化
+									$(window).bind('pageshow', function (event) {
+										if (event.originalEvent.persisted) {
+											location.reload(true);
+										}
+									});
+								});
+							</script>
+
+
 							<div class="product_info-pricezone">
 								<!--★通常価格★-->
 								{% if Product.hasProductClass -%}
@@ -200,33 +210,38 @@
 
 								<script type="text/javascript">
 									// <![CDATA[
+									// function AllInCart() {
 
-		function changeValueFavorite() {
-			console.log("changeValueFavorite");
-			console.log("mode:value=add_favorite");
-			// $('#mode').val('add_favorite');
-			$('input[name="mode"]').val('add_favorite');
-		}
+									// 	var searchForm = $("#form1");
+									// 	console.log("AllInCart");
 
-		function changeValueAddCart() {
-			console.log("changeValueAddCart");
-			console.log("mode:value=add_cart");
-			// $('#mode').val('add_favorite');
-			$('input[name="mode"]').val('add_cart');
-			ajaxGoCart();
-		}
+									// 	$("input[name='product_id']").each(function () {
+									// 	searchForm.append($('<input type="hidden" />').attr("name", "product_id[]").val($(this).val()));
+									// 	});
 
+									// 	$("input[name='product_class_id']").each(function () {
+									// 	searchForm.append($('<input type="hidden" />').attr("name", "product_class_id[]").val($(this).val()));
+									// 	});
+
+									// 	$("input[name='quantity']").each(function () {
+									// 	searchForm.append($('<input type="hidden" />').attr("name", "quantity[]").val($(this).val()));
+									// 	});
+
+									// 	$("#form1 input[name='mode']").val("allincart")
+
+									// 	searchForm.submit();
+									// }
 
 									function plus(obj) {
 										// console.log("plus");
-										obj.form.quantity.value++;
+										obj.form.quantity.value ++;
 										calc();
 									}
 
 									function minus(obj) {
 										// console.log("minus");
 										if (obj.form.quantity.value > 0) {
-											obj.form.quantity.value--;
+											obj.form.quantity.value --;
 											calc();
 										}
 									}
@@ -251,11 +266,11 @@
 									}
 									// ]]>
 								</script>
+
 							{% endif %}
 
 							<div class="mb50">
 								{% set oldName = "" %}
-								{% set inputToken = form_widget(form._token) %}
 								{% for ProductClass in Product.ProductClasses %}
 									{% set newName = ProductClass.getClassCategory1 %}
 
@@ -277,58 +292,7 @@
 												<i class="fas fa-sort-down"></i>
 											</div>
 										</h3>
-										<div style="background-color:#eee;padding:2rem;">
-										<form action="?" method="post" id="form1" name="form1">
-											<ul
-												id="detail_cart_box__cart_class_category_id" class="classcategory_list">
-												{# 規格1 #}
-												<li>
-													{{ ProductClass.getClassCategory1 }}
-													{{ form_errors(form.classcategory_id1) }}
-												</li>
-												{# 規格2 #}
-													<li>
-														{{ ProductClass.getClassCategory2 }}
-														{{ form_errors(form.classcategory_id2) }}
-													</li>
-													<li>
-														<input type="number" name="quantity" value="0" size="6" class="counter" onchange="calc()" min="0">
-														{{ form_errors(form.quantity) }}
-													</li>
-													<li>
-														<input type="hidden" id="classcategory_id1" name="classcategory_id1" value="{{ ProductClass.ClassCategory1.id }}" />
-														<input type="hidden" id="classcategory_id2" name="classcategory_id2" value="{{ ProductClass.ClassCategory2.id }}" />
-														<input type="hidden" id="mode" name="mode" />
-														<input type="hidden" name="product_id" value="{{ Product.id }}">
-														<input type="hidden" name="product_class_id" value="{{ ProductClass.id }}">
-														{# <input type="hidden" id="_token" name="_token" class="form-control" value="{{ csrf_token('') }}"> #}
-														{# {{ form_widget(form._token) }} #}
-														{# {{ e(inputToken) }} #}
-														{{ inputToken | trans | raw }}
-														{# カートボタン #}
-														<div id="detail_cart_box__button_area" class="btn_area">
-															<button type="submit" id="add-cart" onclick="changeValueAddCart()" class="btn-add_cart">カートに入れる</button>
-															
-															{#Favorite product button#}
-															{% if BaseInfo.option_favorite_product == 1 %}
-																{% if is_favorite == false %}
-																	<button type="submit" id="favorite" onclick="changeValueFavorite()" class="btn-favo">
-																		<i class="far fa-heart"></i>お気に入りに追加</button>
-																{% else %}
-																	<button type="submit" id="favorite" onclick="changeValueFavorite()" class="btn-favo" disabled="disabled">お気に入りに追加済みです</button>
-																{% endif %}
-															{% endif %}
-														</div>
-														{#End div#detail_cart_box__button_area #}
-													</li>
 
-											</ul>
-											{# <div style="display: none"> #}
-												{# {{ form_rest(form) }} #}
-											{# </div> #}
-
-										</form>
-										</div>
 
 										<table class="table table-hover table-condensed color-table">
 											<tr>
@@ -339,10 +303,12 @@
 												<th class="th-count">数量</th>
 												{% if app.isGranted('ROLE_USER') %}
 													<th class="th-sub_total">小計</th>
+													{# <th class="th-cart"></th> #}
 													<th class="th-favorite"></th>
 												{% endif %}
 											</tr>
 									{% endif %}
+										{# 規格1の名称が前と同じ（変わっていない）場合 #}
 											<tr>
 												<td class="td-level">
 													{{ ProductClass.getClassCategory2 }}
@@ -358,47 +324,157 @@
 													{% endif %}
 												</td>
 												<td class="td-count form-group form-inline">
+							<form action="?" method="post" id="form1" name="form1">
+								<!--▼買い物かご-->
 													{# <form name="product_form" class="flex-spinner"> #}
+														<input type="hidden" id="mode" name="mode">
 														<input type="hidden" name="product_id" value="{{ Product.id }}">
 														<input type="hidden" name="product_class_id" value="{{ ProductClass.id }}">
 														<input type="hidden" name="price" value="{{ ProductClass.getPrice02 }}">
-														{# <input type="button" value="－" onclick="minus(this)"> #}
-														<input type="number" name="quantity" value="0" size="6" class="counter" onchange="calc()" min="0">
-														{# <input type="button" value="＋" onclick="plus(this)"> #}
+														<input type="button" value="－" onclick="minus(this)">
+														<input type="text" name="quantity" value="0" size="6" class="counter" onchange="calc()" min="0">
+														<input type="button" value="＋" onclick="plus(this)">
 													{# </form> #}
+														<span class="sub_total_{{ ProductClass.id }}">¥ 0</span>
+
+														{# カートボタン #}
+														<div id="detail_cart_box__button_area" class="btn_area">
+															<button type="submit" id="add-cart" class="btn-add_cart">カートに入れる</button>
+
+															{#Favorite product button#}
+															{% if BaseInfo.option_favorite_product == 1 %}
+																{% if is_favorite == false %}
+																	{# お気に入りに追加 #}
+																	<button type="submit" id="favorite" class="btn-favo">
+																		<i class="far fa-heart"></i>
+																	</button>
+																{% else %}
+																	{# お気に入りに追加済みです #}
+																	<button type="submit" id="favorite" class="btn-favo" disabled="disabled">
+																		<i class="fas fa-heart"></i>
+																	</button>
+																{% endif %}
+															{% endif %}
+														</div>
+														{#End div#detail_cart_box__button_area #}
+
+							</form>
 												</td>
 												{% if app.isGranted('ROLE_USER') %}
-													<td class="td-sub_total">
+													{# <td class="td-sub_total">
 														<span class="sub_total_{{ ProductClass.id }}">¥ 0</span>
 													</td>
-													<td class="td-favorite">
-														{# お気に入り仮実装 #}
-														{% if ProductClass.id % 2 == 0 %}
-															<i class="far fa-heart"></i>
-														{% else %}
-															<i class="fas fa-heart"></i>
+													<td class="td-favorite"> #}
+														{# カートボタン #}
+														{# <div id="detail_cart_box__button_area" class="btn_area">
+															<button type="submit" id="add-cart" class="btn-add_cart">カートに入れる</button> #}
+
+															{#Favorite product button#}
+															{# {% if BaseInfo.option_favorite_product == 1 %}
+																{% if is_favorite == false %} #}
+																	{# お気に入りに追加 #}
+																	{# <button type="submit" id="favorite" class="btn-favo">
+																		<i class="far fa-heart"></i>
+																	</button>
+																{% else %} #}
+																	{# お気に入りに追加済みです #}
+																	{# <button type="submit" id="favorite" class="btn-favo" disabled="disabled">
+																		<i class="fas fa-heart"></i>
+																	</button>
+																{% endif %}
+															{% endif %} #}
+														{# </div> #}
+														{#End div#detail_cart_box__button_area #}
+
+													{# </td> #}
+													{# <td class="td-favorite">
+														{% if BaseInfo.option_favorite_product == 1 %}
+															{% if is_favorite == false %}
+																<button type="submit" id="favorite" class="btn-favo">
+																	<i class="far fa-heart"></i>
+																</button>
+															{% else %}
+																<button type="submit" id="favorite" class="btn-favo" disabled="disabled">
+																	<i class="fas fa-heart"></i>
+																</button>
+															{% endif %}
 														{% endif %}
-													</td>
+													</td> #}
 												{% endif %}
+								<!--▲買い物かご-->
+								{# {{ form_rest(form) }} #}
 											</tr>
+									{# 規格1の名称 変化判別の為に変数に格納 #}
 									{% set oldName = ProductClass.getClassCategory1 %}
 								{% endfor %}
 
-								{# 最後のテーブルの閉じタグを出力 #}
-								</table>
+										{# 最後のテーブルの閉じタグを出力 #}
+										</table>
+
 
 
 								{% if app.isGranted('ROLE_USER') %}
 									<h3 class="grand-total">合計
 										<span class="total">¥ 0</span>
 									</h3>
-									<button onclick="AllInCart(); return false;" type="submit" class="btn btn-primary btn-block prevention-btn prevention-mask">カートに入れる</button>
+									{# <button onclick="AllInCart(); return false;" type="submit" class="btn btn-primary btn-block prevention-btn prevention-mask">カートに入れる</button> #}
 								{% endif %}
 							</div>
 							{# for文を抜けるbreak #}
 							{% set break = true %}
+
 						{% else %}
 							{# 商品のカテゴリーにカラー（category_id = 7）が含められていない場合 #}
+
+
+							<script>
+								$(function () {
+									$('.carousel').slick({
+										infinite: false,
+										speed: 300,
+										prevArrow: '<button type="button" class="slick-prev"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
+										nextArrow: '<button type="button" class="slick-next"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
+										slidesToShow: 4,
+										slidesToScroll: 4,
+										responsive: [
+											{
+												breakpoint: 768,
+												settings: {
+													slidesToShow: 3,
+													slidesToScroll: 3
+												}
+											}
+										]
+									});
+
+									$('.slides').slick({
+										dots: true,
+										arrows: false,
+										speed: 300,
+										customPaging: function (slider, i) {
+											return '<button class="thumbnail">' + $(slider.$slides[i]).find('img').prop('outerHTML') + '</button>';
+										}
+									});
+
+									$('#favorite').click(function () {
+										$('#mode').val('add_favorite');
+									});
+
+									$('#add-cart').click(function () {
+										$('#mode').val('add_cart');
+									});
+
+									// bfcache無効化
+									$(window).bind('pageshow', function (event) {
+										if (event.originalEvent.persisted) {
+											location.reload(true);
+										}
+									});
+								});
+							</script>
+
+
+
 							<div class="product_info-pricezone">
 								<!--★通常価格★-->
 								{% if Product.hasProductClass -%}
@@ -453,7 +529,8 @@
 								{% else %}
 									{# 規格設定がない場合 #}
 									<p class="product_info-price">サロン様価格:
-										<span>{{ Product.getPrice02Min|price }}</span>（税抜）</p>
+										<span>{{ Product.getPrice02Min|price }}</span>（税抜）
+									</p>
 								{% endif -%}
 							</div>
 							<form action="?" method="post" id="form1" name="form1">
@@ -505,7 +582,8 @@
 												{% if BaseInfo.option_favorite_product == 1 %}
 													{% if is_favorite == false %}
 														<button type="submit" id="favorite" class="btn-favo">
-															<i class="far fa-heart"></i>お気に入りに追加</button>
+															<i class="far fa-heart"></i>お気に入りに追加
+														</button>
 													{% else %}
 														<button type="submit" id="favorite" class="btn-favo" disabled="disabled">お気に入りに追加済みです</button>
 													{% endif %}
@@ -525,7 +603,8 @@
 											{% if BaseInfo.option_favorite_product == 1 %}
 												{% if is_favorite == false %}
 													<button type="submit" id="favorite" class="btn-favo">
-														<i class="far fa-heart"></i>お気に入りに追加</button>
+														<i class="far fa-heart"></i>お気に入りに追加
+													</button>
 												{% else %}
 													<button type="submit" id="favorite" class="btn-favo" disabled="disabled">お気に入りに追加済みです</button>
 												{% endif %}
@@ -547,13 +626,15 @@
 
 
 
-			</div>
-		</div>
+
+		</div>{# wrap #}
 	</div>
+	{# product_wrap #}
 
 
 	<div class="product_under mt80">
-		<div class="wrap">
+		<div
+			class="wrap">
 			{# フリーエリア #}
 			{% if Product.freearea %}
 				<div id="sub_area" class="row">

@@ -50,6 +50,47 @@
     ),
     'event' => NULL,
   ),
+  'EasyCart' => 
+  array (
+    'config' => 
+    array (
+      'name' => '続けてカートイン',
+      'code' => 'EasyCart',
+      'version' => '1.0.1',
+      'event' => 'EasyCartEvent',
+      'service' => 
+      array (
+        0 => 'EasyCartServiceProvider',
+      ),
+    ),
+    'event' => 
+    array (
+      'Product/list.twig' => 
+      array (
+        0 => 
+        array (
+          0 => 'onRenderProductList',
+          1 => 'NORMAL',
+        ),
+      ),
+      'Product/detail.twig' => 
+      array (
+        0 => 
+        array (
+          0 => 'onRenderProductDetail',
+          1 => 'NORMAL',
+        ),
+      ),
+      'front.product.detail.complete' => 
+      array (
+        0 => 
+        array (
+          0 => 'onFrontProductDetailComplete',
+          1 => 'NORMAL',
+        ),
+      ),
+    ),
+  ),
   'Maker' => 
   array (
     'config' => 

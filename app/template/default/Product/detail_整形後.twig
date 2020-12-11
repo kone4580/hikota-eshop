@@ -53,13 +53,11 @@
 			}
 		});
 
-		$('#favorite').click(function() {
-			console.log("#favorite.click");
+		$('#favorite').click(function () {
 			$('#mode').val('add_favorite');
 		});
 
-		$('#add-cart').click(function() {
-			console.log("#add-cart.click");
+		$('#add-cart').click(function () {
 			$('#mode').val('add_cart');
 		});
 
@@ -201,22 +199,6 @@
 								<script type="text/javascript">
 									// <![CDATA[
 
-		function changeValueFavorite() {
-			console.log("changeValueFavorite");
-			console.log("mode:value=add_favorite");
-			// $('#mode').val('add_favorite');
-			$('input[name="mode"]').val('add_favorite');
-		}
-
-		function changeValueAddCart() {
-			console.log("changeValueAddCart");
-			console.log("mode:value=add_cart");
-			// $('#mode').val('add_favorite');
-			$('input[name="mode"]').val('add_cart');
-			ajaxGoCart();
-		}
-
-
 									function plus(obj) {
 										// console.log("plus");
 										obj.form.quantity.value++;
@@ -232,8 +214,11 @@
 									}
 
 									function calc() {
+
 										var total = 0;
+
 										$("form[name=product_form]").each(function () {
+
 											var product_class_id = $(this).find('input[name=product_class_id]').val();
 											var price = $(this).find('input[name=price]').val();
 											var quantity = $(this).find('input[name=quantity]').val();
@@ -243,6 +228,7 @@
 											// alert (sub_total);
 											$('span.sub_total_' + product_class_id).html(separate(sub_total));
 										});
+
 										$('span.total').html(separate(total));
 									}
 
@@ -255,7 +241,6 @@
 
 							<div class="mb50">
 								{% set oldName = "" %}
-								{% set inputToken = form_widget(form._token) %}
 								{% for ProductClass in Product.ProductClasses %}
 									{% set newName = ProductClass.getClassCategory1 %}
 
@@ -277,58 +262,6 @@
 												<i class="fas fa-sort-down"></i>
 											</div>
 										</h3>
-										<div style="background-color:#eee;padding:2rem;">
-										<form action="?" method="post" id="form1" name="form1">
-											<ul
-												id="detail_cart_box__cart_class_category_id" class="classcategory_list">
-												{# 規格1 #}
-												<li>
-													{{ ProductClass.getClassCategory1 }}
-													{{ form_errors(form.classcategory_id1) }}
-												</li>
-												{# 規格2 #}
-													<li>
-														{{ ProductClass.getClassCategory2 }}
-														{{ form_errors(form.classcategory_id2) }}
-													</li>
-													<li>
-														<input type="number" name="quantity" value="0" size="6" class="counter" onchange="calc()" min="0">
-														{{ form_errors(form.quantity) }}
-													</li>
-													<li>
-														<input type="hidden" id="classcategory_id1" name="classcategory_id1" value="{{ ProductClass.ClassCategory1.id }}" />
-														<input type="hidden" id="classcategory_id2" name="classcategory_id2" value="{{ ProductClass.ClassCategory2.id }}" />
-														<input type="hidden" id="mode" name="mode" />
-														<input type="hidden" name="product_id" value="{{ Product.id }}">
-														<input type="hidden" name="product_class_id" value="{{ ProductClass.id }}">
-														{# <input type="hidden" id="_token" name="_token" class="form-control" value="{{ csrf_token('') }}"> #}
-														{# {{ form_widget(form._token) }} #}
-														{# {{ e(inputToken) }} #}
-														{{ inputToken | trans | raw }}
-														{# カートボタン #}
-														<div id="detail_cart_box__button_area" class="btn_area">
-															<button type="submit" id="add-cart" onclick="changeValueAddCart()" class="btn-add_cart">カートに入れる</button>
-															
-															{#Favorite product button#}
-															{% if BaseInfo.option_favorite_product == 1 %}
-																{% if is_favorite == false %}
-																	<button type="submit" id="favorite" onclick="changeValueFavorite()" class="btn-favo">
-																		<i class="far fa-heart"></i>お気に入りに追加</button>
-																{% else %}
-																	<button type="submit" id="favorite" onclick="changeValueFavorite()" class="btn-favo" disabled="disabled">お気に入りに追加済みです</button>
-																{% endif %}
-															{% endif %}
-														</div>
-														{#End div#detail_cart_box__button_area #}
-													</li>
-
-											</ul>
-											{# <div style="display: none"> #}
-												{# {{ form_rest(form) }} #}
-											{# </div> #}
-
-										</form>
-										</div>
 
 										<table class="table table-hover table-condensed color-table">
 											<tr>
@@ -343,44 +276,44 @@
 												{% endif %}
 											</tr>
 									{% endif %}
-											<tr>
-												<td class="td-level">
-													{{ ProductClass.getClassCategory2 }}
-												</td>
-												<td class="td-code">
-													{{ ProductClass.getColorName }}
-												</td>
-												<td class="td-price">
-													{% if app.isGranted('ROLE_USER') %}
-														<span>{{ ProductClass.getPrice02|price }}</span>
-													{% else %}
-														<span class="font-blue">ログイン後に表示されます</span>
-													{% endif %}
-												</td>
-												<td class="td-count form-group form-inline">
-													{# <form name="product_form" class="flex-spinner"> #}
-														<input type="hidden" name="product_id" value="{{ Product.id }}">
-														<input type="hidden" name="product_class_id" value="{{ ProductClass.id }}">
-														<input type="hidden" name="price" value="{{ ProductClass.getPrice02 }}">
-														{# <input type="button" value="－" onclick="minus(this)"> #}
-														<input type="number" name="quantity" value="0" size="6" class="counter" onchange="calc()" min="0">
-														{# <input type="button" value="＋" onclick="plus(this)"> #}
-													{# </form> #}
-												</td>
-												{% if app.isGranted('ROLE_USER') %}
-													<td class="td-sub_total">
-														<span class="sub_total_{{ ProductClass.id }}">¥ 0</span>
-													</td>
-													<td class="td-favorite">
-														{# お気に入り仮実装 #}
-														{% if ProductClass.id % 2 == 0 %}
-															<i class="far fa-heart"></i>
-														{% else %}
-															<i class="fas fa-heart"></i>
-														{% endif %}
-													</td>
+									<tr>
+										<td class="td-level">
+											{{ ProductClass.getClassCategory2 }}
+										</td>
+										<td class="td-code">
+											{{ ProductClass.getColorName }}
+										</td>
+										<td class="td-price">
+											{% if app.isGranted('ROLE_USER') %}
+												<span>{{ ProductClass.getPrice02|price }}</span>
+											{% else %}
+												<span class="font-blue">ログイン後に表示されます</span>
+											{% endif %}
+										</td>
+										<td class="td-count form-group form-inline">
+											<form name="product_form" class="flex-spinner">
+												<input type="hidden" name="product_id" value="{{ Product.id }}">
+												<input type="hidden" name="product_class_id" value="{{ ProductClass.id }}">
+												<input type="hidden" name="price" value="{{ ProductClass.getPrice02 }}">
+												<input type="button" value="－" onclick="minus(this)">
+												<input type="text" name="quantity" value="0" size="6" class="counter" onchange="calc()" min="0">
+												<input type="button" value="＋" onclick="plus(this)">
+											</form>
+										</td>
+										{% if app.isGranted('ROLE_USER') %}
+											<td class="td-sub_total">
+												<span class="sub_total_{{ ProductClass.id }}">¥ 0</span>
+											</td>
+											<td class="td-favorite">
+												{# お気に入り仮実装 #}
+												{% if ProductClass.id % 2 == 0 %}
+													<i class="far fa-heart"></i>
+												{% else %}
+													<i class="fas fa-heart"></i>
 												{% endif %}
-											</tr>
+											</td>
+										{% endif %}
+									</tr>
 									{% set oldName = ProductClass.getClassCategory1 %}
 								{% endfor %}
 
