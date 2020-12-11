@@ -730,4 +730,49 @@ class ProductClass extends \Eccube\Entity\AbstractEntity
     {
         return $this->color_name;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $CustomerFavoriteProductClasses;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->CustomerFavoriteProductClasses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add CustomerFavoriteProductClasses
+     *
+     * @param \Eccube\Entity\CustomerFavoriteProductClass $customerFavoriteProductClasses
+     * @return ProductClass
+     */
+    public function addCustomerFavoriteProductClass(\Eccube\Entity\CustomerFavoriteProductClass $customerFavoriteProductClasses)
+    {
+        $this->CustomerFavoriteProductClasses[] = $customerFavoriteProductClasses;
+
+        return $this;
+    }
+
+    /**
+     * Remove CustomerFavoriteProductClasses
+     *
+     * @param \Eccube\Entity\CustomerFavoriteProductClass $customerFavoriteProductClasses
+     */
+    public function removeCustomerFavoriteProductClass(\Eccube\Entity\CustomerFavoriteProductClass $customerFavoriteProductClasses)
+    {
+        $this->CustomerFavoriteProductClasses->removeElement($customerFavoriteProductClasses);
+    }
+
+    /**
+     * Get CustomerFavoriteProductClasses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCustomerFavoriteProductClasses()
+    {
+        return $this->CustomerFavoriteProductClasses;
+    }
 }

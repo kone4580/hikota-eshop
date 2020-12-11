@@ -1,0 +1,40 @@
+Eccube\Entity\CustomerFavoriteProductClass:
+    type: entity
+    table: dtb_customer_favorite_product_class
+    repositoryClass: Eccube\Repository\CustomerFavoriteProductClassRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: favorite_id
+            generator:
+                strategy: AUTO
+    fields:
+        create_date:
+            type: datetime
+            nullable: false
+        update_date:
+            type: datetime
+            nullable: false
+        del_flg:
+            type: smallint
+            nullable: false
+            unsigned: false
+            options:
+                default: '0'
+    manyToOne:
+        Customer:
+            targetEntity: Eccube\Entity\Customer
+            inversedBy: CustomerFavoriteProductClasses
+            joinColumn:
+                name: customer_id
+                referencedColumnName: customer_id
+        ProductClass:
+            targetEntity: Eccube\Entity\ProductClass
+            inversedBy: CustomerFavoriteProductClasses
+            joinColumn:
+                name: product_class_id
+                referencedColumnName: product_class_id
+    lifecycleCallbacks: {  }

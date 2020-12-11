@@ -228,6 +228,11 @@ class Customer extends \Eccube\Entity\AbstractEntity implements UserInterface, \
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
+    private $CustomerFavoriteProductClasses;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
     private $CustomerAddresses;
 
     /**
@@ -241,6 +246,7 @@ class Customer extends \Eccube\Entity\AbstractEntity implements UserInterface, \
     public function __construct()
     {
         $this->CustomerFavoriteProducts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->CustomerFavoriteProductClasses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->CustomerAddresses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->Orders = new \Doctrine\Common\Collections\ArrayCollection();
 
@@ -1057,6 +1063,39 @@ class Customer extends \Eccube\Entity\AbstractEntity implements UserInterface, \
     public function getCustomerFavoriteProducts()
     {
         return $this->CustomerFavoriteProducts;
+    }
+
+    /**
+     * Add CustomerFavoriteProductClasses
+     *
+     * @param  \Eccube\Entity\CustomerFavoriteProductClass $customerFavoriteProductClasses
+     * @return Customer
+     */
+    public function addCustomerFavoriteProductClass(\Eccube\Entity\CustomerFavoriteProductClass $customerFavoriteProductClasses)
+    {
+        $this->CustomerFavoriteProductClasses[] = $customerFavoriteProductClasses;
+
+        return $this;
+    }
+
+    /**
+     * Remove CustomerFavoriteProductClasses
+     *
+     * @param \Eccube\Entity\CustomerFavoriteProductClass $customerFavoriteProductClasses
+     */
+    public function removeCustomerFavoriteProductClass(\Eccube\Entity\CustomerFavoriteProductClass $customerFavoriteProductClasses)
+    {
+        $this->CustomerFavoriteProductClasses->removeElement($customerFavoriteProductClasses);
+    }
+
+    /**
+     * Get CustomerFavoriteProductClasses
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCustomerFavoriteProductClasses()
+    {
+        return $this->CustomerFavoriteProductClasses;
     }
 
     /**

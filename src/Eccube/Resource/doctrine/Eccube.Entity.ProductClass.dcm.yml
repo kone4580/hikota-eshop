@@ -107,6 +107,10 @@ Eccube\Entity\ProductClass:
                 name: creator_id
                 referencedColumnName: member_id
                 nullable: false
+    oneToMany:
+        CustomerFavoriteProductClasses:
+            targetEntity: Eccube\Entity\CustomerFavoriteProductClass
+            mappedBy: ProductClass
     oneToOne:
         ProductStock:
             targetEntity: Eccube\Entity\ProductStock

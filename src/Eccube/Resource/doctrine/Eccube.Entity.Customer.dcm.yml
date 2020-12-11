@@ -171,6 +171,9 @@ Eccube\Entity\Customer:
         CustomerFavoriteProducts:
             targetEntity: Eccube\Entity\CustomerFavoriteProduct
             mappedBy: Customer
+        CustomerFavoriteProductClasses:
+            targetEntity: Eccube\Entity\CustomerFavoriteProductClass
+            mappedBy: Customer
         CustomerAddresses:
             targetEntity: Eccube\Entity\CustomerAddress
             mappedBy: Customer
